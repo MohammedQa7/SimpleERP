@@ -22,7 +22,6 @@
                 <FooterSection />
             </div>
         </div>
-
     </div>
 
 
@@ -33,13 +32,13 @@
 import FooterSection from '@/components/Website/FooterSection.vue';
 import Navbar from '@/components/Website/Navbar.vue'
 import { useAppearance } from '@/composables/useAppearance';
-import { useForm } from '@inertiajs/vue3';
-import { ImageDownIcon } from 'lucide-vue-next';
-import { computed, onMounted, ref, toRef, watch } from 'vue';
+import { resetToDefaultTheme } from '@/composables/useCustomTheme';
+import { onMounted } from 'vue';
 const appearance = useAppearance();
 
 
 onMounted(() => {
     appearance.updateAppearance('light')
+    resetToDefaultTheme();
 })
 </script>

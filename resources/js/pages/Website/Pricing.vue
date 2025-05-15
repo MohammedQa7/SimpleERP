@@ -89,7 +89,6 @@
         <!-- Table -->
         <ComparisonTable :plans="filteredPlans" :period="billingPeriod"
             :features-and-categories="featuresAndCategories" />
-
     </div>
 
 
@@ -102,6 +101,8 @@ import WebsiteLayout from './WebsiteLayout.vue'
 import ComparisonTable from '@/components/Website/Pricing/ComparisonTable.vue'
 import Badge from '@/components/ui/badge/Badge.vue'
 import SlideUpAnimation from '@/components/Website/SlideUpAnimation.vue'
+import { router } from '@inertiajs/vue3'
+import { useEcho, useEchoPublic } from '@laravel/echo-vue'
 
 const propsData = defineProps({
     plans: Array,
@@ -119,6 +120,7 @@ function setBillingPeriod(period: BillingPeriod) {
 const filteredPlans = computed(() => {
     return propsData.plans?.data?.filter(plan => plan.prices[billingPeriod.value])
 })
+
 
 
 defineOptions({
