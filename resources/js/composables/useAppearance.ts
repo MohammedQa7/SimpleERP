@@ -9,6 +9,8 @@ export function updateTheme(value: Appearance) {
 
     if (value === 'system') {
         const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+        console.log(mediaQueryList);
+
         const systemTheme = mediaQueryList.matches ? 'dark' : 'light';
 
         document.documentElement.classList.toggle('dark', systemTheme === 'dark');
@@ -62,6 +64,7 @@ export function initializeTheme() {
     mediaQuery()?.addEventListener('change', handleSystemThemeChange);
 }
 
+
 export function useAppearance() {
     const appearance = ref<Appearance>('system');
 
@@ -77,6 +80,7 @@ export function useAppearance() {
 
     function updateAppearance(value: Appearance) {
         appearance.value = value;
+
 
         // Store in localStorage for client-side persistence...
         localStorage.setItem('appearance', value);

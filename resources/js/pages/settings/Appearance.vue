@@ -7,6 +7,8 @@ import { type BreadcrumbItem } from '@/types';
 
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
+import Separator from '@/components/ui/separator/Separator.vue';
+import ThemeSwitcher from '@/components/ThemeSwitcher.vue';
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -14,16 +16,25 @@ const breadcrumbItems: BreadcrumbItem[] = [
         href: '/settings/appearance',
     },
 ];
+
+const propsData = defineProps({
+    themes: Array,
+});
 </script>
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbItems">
+
         <Head title="Appearance settings" />
 
         <SettingsLayout>
             <div class="space-y-6">
                 <HeadingSmall title="Appearance settings" description="Update your account's appearance settings" />
                 <AppearanceTabs />
+
+                <Separator />
+
+                <ThemeSwitcher :themes="themes" />
             </div>
         </SettingsLayout>
     </AppLayout>
