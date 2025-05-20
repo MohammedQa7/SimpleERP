@@ -86,7 +86,11 @@
                     <DialogClose>
                         <Button variant="outline">Close</Button>
                     </DialogClose>
-                    <Button @click="generateInvoice(order)">Generate Invoice</Button>
+                    <Button @click.prevent="generateInvoice(order.orderNumber)" :disabled="isGenerating">
+                        <Loader2 class=" animate-spin" />
+                        Generate
+                        Invoice
+                    </Button>
                 </DialogFooter>
             </div>
 
@@ -95,7 +99,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Dialog from '../ui/dialog/Dialog.vue';
 import DialogContent from '../ui/dialog/DialogContent.vue';
 import InvoiceSkelaton from './InvoiceSkelaton.vue';
@@ -105,6 +109,10 @@ import DialogFooter from '../ui/dialog/DialogFooter.vue';
 import Button from '../ui/button/Button.vue';
 import Separator from '../ui/separator/Separator.vue';
 import DialogClose from '../ui/dialog/DialogClose.vue';
+import { router } from '@inertiajs/vue3';
+import { toast } from '../ui/toast';
+import { Loader2 } from 'lucide-vue-next';
+const isGenerating = ref(false);
 const propsData = defineProps({
     order: Object,
     isOpen: Boolean,
@@ -113,6 +121,24 @@ const propsData = defineProps({
 const isDialogOpened = computed(() => {
     return propsData.isOpen;
 })
+
+const generateInvoice = (orderNumber) => {
+    isGenerating.value = true;
+    router.post(route('invoices.store'), { orderNumber: orderNumber }, {
+        onSuccess: () => {
+            isGenerating.value = !isGenerating.value;
+            toast({
+                title: 'Invoice has been generated',
+            });
+        },
+        onError: () => {
+            isGenerating.value = !isGenerating.value;
+            toast({
+                title: 'Something went wrong while generating invoice',
+            })
+        },
+    })
+}
 
 
 </script>

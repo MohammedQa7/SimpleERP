@@ -2,6 +2,7 @@
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItemType } from '@/types';
+import QuickAccessCommand from './QuickAccessCommand.vue';
 
 defineProps<{
     breadcrumbs?: BreadcrumbItemType[];
@@ -14,9 +15,12 @@ defineProps<{
     >
         <div class="flex items-center gap-2">
             <SidebarTrigger class="-ml-1" />
+            
             <template v-if="breadcrumbs.length > 0">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
             </template>
+            <QuickAccessCommand />
+            
         </div>
     </header>
 </template>

@@ -16,9 +16,9 @@
                             <div class="flex flex-col space-y-2">
                                 <Label for="order-status">Order status</Label>
                                 <!-- Order Status selection -->
-                                <Select v-model="form.orderStatus">
+                                <Select v-model="form.orderStatus" :disabled="!canUpdate">
                                     <SelectTrigger>
-                                        <SelectValue placeholder="Select a product" />
+                                        <SelectValue placeholder=" Select a product" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -39,7 +39,7 @@
 
                                     <!-- Customer selections Component -->
                                     <CustomerSelect :customers="customers" :pre-selected-customer="preSelectedCustomer"
-                                        @bindSelectedCustomer="onBindSelectedCustomer" />
+                                        @bindSelectedCustomer="onBindSelectedCustomer" :disabled="!canUpdate" />
 
                                     <InputError :message="form.errors.customerId" />
                                 </div>
@@ -80,7 +80,8 @@
                                                             <td class="p-4">
                                                                 <div class="relative">
                                                                     <Select v-model="item.productId"
-                                                                        @update:model-value="updateProduct(item)">
+                                                                        @update:model-value="updateProduct(item)"
+                                                                        :disabled="!canUpdate">
                                                                         <SelectTrigger>
                                                                             <SelectValue
                                                                                 placeholder="Select a product" />
@@ -113,7 +114,7 @@
                                                             <td class="p-4">
                                                                 <Input type="number" min="1"
                                                                     v-model.number="item.quantity" placeholder="1"
-                                                                    class="w-20" />
+                                                                    class="w-20" :disabled="!canUpdate" />
 
                                                                 <InputError
                                                                     :message="form.errors[`orderItems.${index}.quantity`]" />
@@ -140,7 +141,8 @@
                                                             <!-- Remove prduct -->
                                                             <td class="p-4">
                                                                 <Button @click="removeOrderItem(index)"
-                                                                    variant="outline" size="icon">
+                                                                    variant="outline" size="icon"
+                                                                    :disabled="!canUpdate">
                                                                     <Trash class="h-4 w-4" />
                                                                     <span class="sr-only">Remove</span>
                                                                 </Button>
@@ -157,50 +159,62 @@
                                                     <div class="space-y-2">
                                                         <div class="text-sm font-medium text-muted-foreground">Product
                                                         </div>
-                                                        <Select v-model="item.product" class="w-full">
+                                                        <Select v-model="item.productId"
+                                                            @update:model-value="updateProduct(item)"
+                                                            :disabled="!canUpdate">
                                                             <SelectTrigger>
                                                                 <SelectValue placeholder="Select a product" />
                                                             </SelectTrigger>
                                                             <SelectContent>
                                                                 <SelectGroup>
-                                                                    <SelectItem value="apple">Apple</SelectItem>
+                                                                    <SelectItem
+                                                                        v-for="(product, index) in products.data"
+                                                                        :key="index" :value="product.id"
+                                                                        class="hover:bg-secondary cursor-pointer">
+                                                                        {{ product.name }}
+                                                                    </SelectItem>
                                                                 </SelectGroup>
                                                             </SelectContent>
                                                         </Select>
                                                     </div>
 
                                                     <div class="space-y-2">
-                                                        <div class="text-sm font-medium text-muted-foreground">Price
-                                                            (Per
-                                                            item)</div>
-                                                        <div>Product unit price</div>
-                                                        <!-- <div>{{ (item.price).toFixed(2) }}</div> -->
+                                                        <div class="text-sm font-medium text-muted-foreground">
+                                                            Product unit price</div>
+                                                        ${{ item.product.sellingPrice ?? 0 }}
                                                     </div>
 
                                                     <div class="space-y-2">
                                                         <div class="text-sm font-medium text-muted-foreground">Quantity
                                                         </div>
                                                         <Input type="number" min="0" v-model.number="item.quantity"
-                                                            placeholder="1" class="w-full" />
+                                                            placeholder="1" class="w-full" :disabled="!canUpdate" />
                                                     </div>
 
                                                     <div class="space-y-2">
                                                         <div class="text-sm font-medium text-muted-foreground">
                                                             Availability
                                                         </div>
-                                                        <Badge :variant="'secondary'">In stock</Badge>
+                                                        <Badge v-if="Object.keys(item.product).length > 0" :variant="!checkProductStock(item.product)
+                                                            ? 'default' : 'destructive'">
+
+                                                            {{ !checkProductStock(item.product)
+                                                                ? 'In stock' : 'Out of stock' }}
+                                                        </Badge>
                                                     </div>
 
                                                     <div class="space-y-2">
                                                         <div class="text-sm font-medium text-muted-foreground">Total
                                                         </div>
-                                                        <div>total amount</div>
-                                                        <!-- <div>{{ (item.price * item.quantity).toFixed(2) }}</div> -->
+                                                        ${{ item.product.sellingPrice ?
+                                                            item.product.sellingPrice
+                                                            * item.quantity : 0 }}
                                                     </div>
 
                                                     <div class="pt-2 flex justify-end">
                                                         <Button @click="removeOrderItem(index)" variant="outline"
-                                                            size="sm" class="flex items-center gap-1">
+                                                            :disabled="!canUpdate" size="sm"
+                                                            class="flex items-center gap-1">
                                                             <Trash class="h-4 w-4" />
                                                             <span>Remove</span>
                                                         </Button>
@@ -210,7 +224,7 @@
                                         </div>
                                     </CardContent>
                                 </Card>
-                                <Button @click="addOrderItem" variant="outline">
+                                <Button @click="addOrderItem" variant="outline" :disabled="!canUpdate">
                                     <Plus class="mr-2 h-4 w-4" />
                                     Add Product
                                 </Button>
@@ -220,7 +234,8 @@
                             <!-- Order Notes -->
                             <div class="space-y-2">
                                 <Label for="notes">Notes</Label>
-                                <Textarea v-model="form.notes" placeholder="Add any additional notes here..." />
+                                <Textarea v-model="form.notes" placeholder="Add any additional notes here..."
+                                    :disabled="!canUpdate" />
                             </div>
                         </div>
                     </CardContent>
@@ -233,33 +248,39 @@
                     </div>
                     <div class="flex space-x-2 ">
                         <Button @click.prevent="CloseDialog" variant="outline">Cancel</Button>
-                        <Button v-if="!form.isAnyProductOutOfStock" @click.prevent="submit" :disabled="form.processing">
-                            {{ form.processing ? 'Updating ...' : 'Update Order' }}
-                        </Button>
-                        <AlertDialog v-else>
-                            <AlertDialogTrigger as-child>
-                                <Button>Update order</Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle><span class="text-destructive"> Product out of stock!</span>, Are
-                                        you absolutely sure?
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                        There is a product that is out of stock, the <b>warehouse</b> will be notified
-                                        to
-                                        restock it, and
-                                        the order will be placed on <b>hold</b> in the meantime.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction @click.prevent="submit" :disabled="form.processing">
-                                        {{ form.processing ? 'Updating ...' : 'Yes, I am sure' }}
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
+                        <div v-if="canUpdate">
+                            <Button v-if="!form.isAnyProductOutOfStock" @click.prevent="submit"
+                                :disabled="form.processing">
+                                {{ form.processing ? 'Updating ...' : 'Update Order' }}
+                            </Button>
+                            <AlertDialog v-else>
+                                <AlertDialogTrigger as-child>
+                                    <Button>Update order</Button>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle><span class="text-destructive"> Product out of stock!</span>,
+                                            Are
+                                            you absolutely sure?
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            There is a product that is out of stock, the <b>warehouse</b> will be
+                                            notified
+                                            to
+                                            restock it, and
+                                            the order will be placed on <b>hold</b> in the meantime.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        <AlertDialogAction @click.prevent="submit" :disabled="form.processing">
+                                            {{ form.processing ? 'Updating ...' : 'Yes, I am sure' }}
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                        <Button v-else disabled>Invoiced</Button>
                     </div>
                 </DialogFooter>
             </div>
@@ -327,7 +348,7 @@ const propsData = defineProps({
     customers: Object,
     products: Object,
     order: Object,
-    orderStatus: Array,
+    orderStatus: Object,
     isOpen: Boolean,
     isLoading: Boolean,
 });
@@ -343,8 +364,8 @@ const addOrderItem = () => {
 }
 
 const updateProduct = (item) => {
-
     item.product = propsData.products.data.find((product) => product.id == item.productId);
+    
 }
 
 // Remove an order item
@@ -385,7 +406,6 @@ const productStockMap = computed(() => {
 
 const checkProductStock = (product) => {
     return (productStockMap.value[product.sku] || 0) > product.stock;
-
 }
 
 
@@ -396,6 +416,10 @@ const onBindSelectedCustomer = (customer) => {
 const onBindCalendarDate = (date) => {
     form.orderDate = date;
 }
+
+const canUpdate = computed(() => {
+    return propsData.order.data.status == propsData.orderStatus.APPROVED || propsData.order.data.status.replace(/_/g, " ") == propsData.orderStatus.WAITING_FOR_RESTOCK
+})
 
 
 const submit = () => {

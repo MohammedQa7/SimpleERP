@@ -21,6 +21,7 @@ class OrderResource extends JsonResource
             'totalPrice' => $this->total_price,
             'status' => $this->status,
             'notes' => $this->notes,
+            'hasGeneratedInvoice' => $this->hasGeneratedInvoice(),
             'createdAt' => $this->created_at->format('Y-m-d'),
             'approvedAt' => when(!is_null($this->approved_at), function () {
                 return $this->approved_at->format('Y-m-d');

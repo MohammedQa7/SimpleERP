@@ -20,6 +20,18 @@ class Order extends Model
     }
 
 
+    function hasGeneratedInvoice()
+    {
+        if (!$this->relationLoaded('invoice')) {
+            $this->load('invoice');
+
+            return !is_null($this->invoice);
+        }
+        return !is_null($this->invoice);
+
+    }
+
+    // Relationships
     function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -30,9 +42,16 @@ class Order extends Model
         return $this->hasMany(OrderItems::class);
     }
 
+    function invoice()
+    {
+        return $this->hasOne(Invoice::class);
+    }
 
+    // Scopes
     function scopeOnlyApprovedOrders($query)
     {
         return $query->where('status', OrderStatus::APPROVED->value);
     }
+
+
 }

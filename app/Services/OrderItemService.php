@@ -23,6 +23,9 @@ class OrderItemService
             return $item['orderItemId'] == null;
         });
 
+
+
+
         foreach ($new_items as $item) {
             $product = Product::where('sku', $item['product']['sku'])->firstOrFail();
             $order->orderItems()->create([
@@ -36,16 +39,18 @@ class OrderItemService
     function updateOrderItems($order, $order_items)
     {
 
+        dd($order , $order_items);
         $existing_order_items = array_column($order->orderItems->toArray(), 'id');
-        $order_items_to_updates = array_filter($order_items, function ($item) use ($existing_order_items) {
+        $order_items_to_update = array_filter($order_items, function ($item) use ($existing_order_items) {
             return in_array($item['orderItemId'], $existing_order_items);
         });
 
 
-        if (sizeof($order_items_to_updates) > 0 && !is_null($order_items_to_updates)) {
+        if (sizeof($order_items_to_update) > 0 && !is_null($order_items_to_update)) {
 
-            foreach ($order_items_to_updates as $item) {
+            foreach ($order_items_to_update as $item) {
                 $order_item = OrderItems::where('id', $item['orderItemId'])->firstOrFail();
+
                 $order_item->update([
                     'product_id' => $item['productId'],
                     'quantity' => $item['quantity'],

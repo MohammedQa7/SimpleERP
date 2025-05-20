@@ -35,21 +35,25 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                         <div class="space-y-2">
                             <label for="name" class="text-sm font-medium">Full Name</label>
                             <Input placeholder="john doe" v-model="form.name" />
                             <InputError :message="form.errors.name" />
                         </div>
+
                         <div class="space-y-2">
                             <label for="email" class="text-sm font-medium">Email</label>
                             <Input placeholder="john@gmail.com" v-model="form.email" />
                             <InputError :message="form.errors.email" />
                         </div>
+
                         <div class="space-y-2">
                             <label for="phone-number" class="text-sm font-medium">Phone number</label>
                             <Input placeholder="+2213123123" v-model="form.phoneNumber" />
                             <InputError :message="form.errors.phoneNumber" />
                         </div>
+
                         <div class="space-y-2">
                             <label for="password" class="text-sm font-medium">Password</label>
                             <div class="relative">
@@ -77,11 +81,15 @@
                                 </button>
                                 <InputError :message="form.errors.password" />
                             </div>
+
                             <div class="text-xs text-muted-foreground mt-1">
                                 Password must be at least 8 characters long with a mix of letters, numbers,
                                 and symbols.
                             </div>
+
                         </div>
+
+
                         <div class="space-y-2">
                             <label for="password_confirmation" class="text-sm font-medium">Confirm
                                 Password</label>
@@ -112,6 +120,7 @@
                                 <InputError :message="form.errors.password_confirmation" />
                             </div>
                         </div>
+
                         <div class="space-y-2">
                             <NumberField id="salary" v-model="form.salary" :format-options="{
                                 style: 'currency',
@@ -127,10 +136,11 @@
                                 </NumberFieldContent>
                             </NumberField>
                         </div>
+
                         <div class="space-y-2">
                             <label for="role" class="text-sm font-medium">Role</label>
                             <!-- Roles mutli select -->
-                            <MultiSelect @bindSelectedItems="bindSelectedRoles" :items="roles" />
+                            <MultiSelect @bindSelectedItems="bindSelectedRoles"  :items="roles" />
                             <InputError :message="form.errors.roles" />
                         </div>
 

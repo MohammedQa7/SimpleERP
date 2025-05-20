@@ -12,17 +12,15 @@
             </Button>
             <input hidden>
         </PopoverTrigger>
-        <PopoverContent class="w-auto p-0">
+        <PopoverContent class="w-auto p-0 ">
             <Calendar v-model="date" calendar-label="Date of birth" initial-focus />
         </PopoverContent>
     </Popover>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import {
-    Plus,
-    Trash,
     CalendarIcon
 } from 'lucide-vue-next'
 
@@ -35,24 +33,15 @@ import { cn } from '@/lib/utils'
 import { DateFormatter, parseDate } from '@internationalized/date'
 import { watch } from 'vue'
 import { toDate } from 'radix-vue/date'
-import { format, parse } from "date-fns";
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-})
+import TimePicker from './time-picker.vue'
+const df = new DateFormatter('en-US', { dateStyle: 'long' })
 const date = ref();
-
-
 const emit = defineEmits();
-
-const onBindSelectedCustomer = (customer) => {
-    form.customerId = customer.id
-
-}
 
 watch(date, () => {
     if (date) {
         const formatedDate = date.value.day + '/' + date.value.month + '/' + date.value.year;
-        emit('bindCalendarDate', formatedDate);
+        emit('bindCalendarDate', date);
     }
 })
 

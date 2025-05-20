@@ -20,9 +20,9 @@
                     <div>
                         <Badge :variant="order.status === orderStatus['APPROVED'] ? 'default' :
                             order.status === orderStatus['WAITING_FOR_RESTOCK'] ? 'secondary' :
-                                order.status === orderStatus['CANCELED'] ? 'destructive' :
-                                    'outline'
-                            ">
+                                order.status === orderStatus['CANCELED']
+                                    ? 'destructive'
+                                    : 'outline'">
                             {{ order.status }}
                         </Badge>
                     </div>
@@ -34,7 +34,8 @@
                             <Edit class="h-4 w-4" />
                             <span class="sr-only">Edit</span>
                         </Button>
-                        <Button variant="outline" size="icon">
+                        <Button v-if="canUpdate(order)" @click.prevent="toggleDeleteDialog(order)" variant="outline"
+                            size="icon">
                             <Trash class="h-4 w-4" />
                             <span class="sr-only">Delete</span>
                         </Button>
@@ -46,7 +47,7 @@
             <div class="text-sm text-muted-foreground">
                 Showing <strong>{{ orders.meta.from }}</strong> to <strong>{{ orders.meta.to }}</strong> of <strong>{{
                     orders.meta.total
-                }}</strong> results
+                    }}</strong> results
             </div>
             <div class="flex items-center space-x-2">
                 <Link :href="orders.links.prev" preserve-scroll>
@@ -59,6 +60,13 @@
         </CardFooter>
     </Card>
 
+    <DeleteDialog :open="deleteOrderDialogProps.isOpen"
+        :description="'Deleting this order will also remove any related stock requests that have not yet been accepted..'"
+        @update:open="deleteOrderDialogProps.isOpen = $event">
+        <AlertDialogAction @click.prevent="deleteOrder(order)">
+            Yes, I am sure
+        </AlertDialogAction>
+    </DeleteDialog>
     <EditOrderDialog v-if="editOrderDialog" :is-open="editOrderDialog" :is-loading="isLoading" :customers="customers"
         :products="products" :order="order" :order-status="orderStatus" @Close="toggleOrderDialog" />
 </template>
@@ -74,20 +82,25 @@ import EditOrderDialog from './EditOrderDialog.vue'
 import { router, Link } from '@inertiajs/vue3'
 import { isNull } from 'lodash';
 import axios from 'axios'
+import CardFooter from '../ui/card/CardFooter.vue'
+import { toast } from '../ui/toast'
+import DeleteDialog from '../DeleteDialog.vue'
+import AlertDialogAction from '../ui/alert-dialog/AlertDialogAction.vue'
 const editOrderDialog = ref(false);
+const deleteOrderDialogProps = ref({
+    isOpen: false,
+    order: null,
+});
 const isLoading = ref(false);
 const customers = ref([]);
 const products = ref([]);
 const order = ref(null);
 const propsData = defineProps({
     orders: Array,
-    orderStatus: Array,
+    orderStatus: Object,
 });
 
-
-
 const toggleOrderDialog = (eventData = true, orderNumber) => {
-
     if (eventData) {
         isLoading.value = true;
         editOrderDialog.value = !editOrderDialog.value;
@@ -112,6 +125,27 @@ const toggleOrderDialog = (eventData = true, orderNumber) => {
         editOrderDialog.value = eventData;
     }
 }
+
+const toggleDeleteDialog = (order) => {
+    deleteOrderDialogProps.value.isOpen = true;
+    deleteOrderDialogProps.value.order = order;
+}
+
+const canUpdate = (order) => {
+    return order.status == propsData.orderStatus.APPROVED || order.status.replace(/_/g, " ") == propsData.orderStatus.WAITING_FOR_RESTOCK
+}
+
+const deleteOrder = () => {
+
+    router.delete(route('orders.destroy', { order: deleteOrderDialogProps.value.order.orderNumber }), {
+        onSuccess: () => {
+            toast({
+                title: "Order has been deleted",
+            })
+        }
+    });
+}
+
 
 
 

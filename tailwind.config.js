@@ -9,6 +9,16 @@ export default {
         './resources/views/**/*.blade.php',
         './resources/js/**/*.{vue,js,ts,jsx,tsx}',
     ],
+    safelist: [
+        'text-emerald-600',
+        'text-amber-600',
+        'text-rose-600',
+        'bg-emerald-900/30',
+        'bg-amber-900/30',
+        'bg-rose-900/30',
+
+        // Add other colors or classes you expect to use dynamically
+    ],
     theme: {
         extend: {
             fontFamily: {

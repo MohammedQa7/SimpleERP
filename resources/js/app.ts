@@ -8,8 +8,20 @@ import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
 import { Link } from '@inertiajs/vue3';
 import axios from 'axios';
+// FILEPOND
+import * as FilePond from 'filepond';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+// Emoji
+import 'vue3-emoji-picker/css'
+
+// Axios
 window.axios = axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+// Filepond
+FilePond.registerPlugin(FilePondPluginImagePreview);
 
 // Extend ImportMeta interface for Vite...
 declare module 'vite/client' {

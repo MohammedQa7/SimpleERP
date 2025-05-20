@@ -201,6 +201,25 @@
 
                             </div>
 
+                            <div class="space-y-2" v-if="form.isAnyProductOutOfStock">
+                                <Label>Select Priority</Label>
+                                <Select v-model="form.priority">
+                                    <SelectTrigger>
+                                        <SelectValue placeholder=" Select a priority" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem v-for="(priority, index) in priority" :key="index"
+                                                :value="priority" class="hover:bg-secondary cursor-pointer">
+                                                {{ priority }}
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                                <InputError :message="form.errors.priority" />
+                            </div>
+
+
                             <!-- Order Notes -->
                             <div class="space-y-2">
                                 <Label for="notes">Notes</Label>
@@ -219,10 +238,14 @@
                         <DialogClose>
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button v-if="!form.isAnyProductOutOfStock" @click.prevent="submit">Create Order</Button>
+                        <Button v-if="!form.isAnyProductOutOfStock" @click.prevent="submit"
+                            :disabled="form.processing">Create Order</Button>
                         <AlertDialog v-else>
                             <AlertDialogTrigger as-child>
-                                <Button>Create Order</Button>
+                                <Button :disabled="form.processing">
+                                    <span v-if="!form.processing">Create Order</span>
+                                    <span v-else>Creating ...</span>
+                                </Button>
                             </AlertDialogTrigger>
                             <AlertDialogContent>
                                 <AlertDialogHeader>
@@ -236,9 +259,12 @@
                                         the order will be placed on <b>hold</b> in the meantime.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
+
                                 <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                    <AlertDialogAction @click.prevent="submit">Yes, I am sure</AlertDialogAction>
+                                    <AlertDialogAction @click.prevent="submit" :disabled="form.processing">
+                                        Yes, I am sure
+                                    </AlertDialogAction>
                                 </AlertDialogFooter>
                             </AlertDialogContent>
                         </AlertDialog>
@@ -290,9 +316,11 @@ import { toast } from '@/components/ui/toast'
 import CustomerSelect from '../CustomerSelect.vue'
 import Calendar from '../Calendar.vue'
 import DialogClose from '../ui/dialog/DialogClose.vue'
+import Label from '../ui/label/Label.vue'
 const isLoading = ref(false);
 const customers = ref([]);
 const products = ref([]);
+const priority = ref([]);
 const selectedCustomer = ref(null);
 const form = useForm({
     customerId: null,
@@ -304,6 +332,7 @@ const form = useForm({
         }
     ],
     notes: null,
+    priority: null,
     isAnyProductOutOfStock: false,
 })
 
@@ -363,7 +392,7 @@ const checkProductStock = (product) => {
 const loadCustomerAndProducts = () => {
     isLoading.value = true;
     router.visit(route('orders.create'), {
-        only: ['customers', 'products'],
+        only: ['customers', 'products', 'priority'],
         preserveScroll: true,
         preserveState: true,
         preserveUrl: true,
@@ -371,6 +400,7 @@ const loadCustomerAndProducts = () => {
             isLoading.value = false;
             customers.value = page.props.customers;
             products.value = page.props.products;
+            priority.value = page.props.priority;
         },
         onError: () => {
             isLoading.value = false;
@@ -392,6 +422,7 @@ const onBindCalendarDate = (date) => {
 
 const submit = () => {
     form.post(route('orders.store'), {
+        preserveState: true,
         onSuccess: () => {
             form.reset();
             selectedCustomer.value = null;

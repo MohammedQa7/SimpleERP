@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Departments;
+use App\Enums\WarehousePriority;
 use App\Models\OrderItems;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Enum;
 
 class OrderRequest extends FormRequest
 {
@@ -31,6 +34,7 @@ class OrderRequest extends FormRequest
             'orderItems.*.product.sku' => ['required', Rule::exists('products', 'sku')],
             'orderItems.*.quantity' => ['required', 'integer', 'min:1'],
             'notes' => ['sometimes'],
+            'priority' => ['sometimes', new Enum(WarehousePriority::class)],
             'isAnyProductOutOfStock' => ['boolean', 'required'],
         ];
 

@@ -1,21 +1,13 @@
 <template>
-
+    <Toaster />
     <div>
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight">Approved Orders</h1>
                 <p class="text-muted-foreground">Convert sales orders to invoices</p>
             </div>
-            <div class="flex items-center gap-2">
-                <Button variant="outline" size="sm" class="h-8 gap-1">
-                    <RefreshCw class="h-3.5 w-3.5" />
-                    <span>Refresh</span>
-                </Button>
-                <Button variant="outline" size="sm" class="h-8 gap-1">
-                    <Download class="h-3.5 w-3.5" />
-                    <span>Export</span>
-                </Button>
-            </div>
+
+            <CreatePaymentTransactionDialog />
         </div>
 
         <!-- Filters -->
@@ -53,108 +45,20 @@
         </Card>
 
         <!-- Orders Table -->
-        <Card>
-            <CardHeader class="flex flex-row items-center justify-between pb-2">
-                <div class="space-y-1">
-                    <CardTitle>Pending Invoice Generation</CardTitle>
-                    <CardDescription>Orders approved by sales department ready for invoicing
-                    </CardDescription>
-                </div>
-                <Badge variant="secondary" class="ml-auto">{{ approvedOrders.length }} Orders</Badge>
-            </CardHeader>
-            <CardContent class="p-0">
-                <div class="overflow-x-auto">
+        <div class="order-table">
+            <ApprovedOrdersTable :approved-orders="approvedOrders" />
+        </div>
 
-                    <ApprovedOrdersTable :approved-orders="approvedOrders.data" />
 
-                </div>
-            </CardContent>
-            <CardFooter v-if="approvedOrders.data.length > 0" class="flex items-center justify-between p-4">
-                <div class="text-sm text-muted-foreground">
-                    Showing <strong>{{ approvedOrders.meta.from }}</strong> to <strong>{{ approvedOrders.meta.to
-                    }}</strong> of
-                    <strong>{{
-                        approvedOrders.meta.total
-                        }}</strong> results
-                </div>
-                <div class="flex items-center space-x-2">
-                    <Link :href="approvedOrders.links.prev" preserve-scroll>
-                    <Button variant="outline" size="sm" :disabled="isNull(approvedOrders.links.prev)">Previous</Button>
-                    </Link>
-                    <Link :href="approvedOrders.links.next" preserve-scroll>
-                    <Button variant="outline" size="sm" :disabled="isNull(approvedOrders.links.next)">Next</Button>
-                    </Link>
-                </div>
-            </CardFooter>
-        </Card>
 
         <!-- Recently Generated Invoices -->
-        <Card class="mt-8">
-            <CardHeader class="flex flex-row items-center justify-between pb-2">
-                <div class="space-y-1">
-                    <CardTitle>Recently Generated Invoices</CardTitle>
-                    <CardDescription>Invoices created from sales orders</CardDescription>
-                </div>
-            </CardHeader>
-            <CardContent class="p-0">
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse">
-                        <thead>
-                            <tr class="border-b border-border">
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Invoice ID</th>
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Order ID</th>
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Customer</th>
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Date</th>
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Amount</th>
-                                <th
-                                    class="text-left py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Status</th>
-                                <th
-                                    class="text-right py-3 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                                    Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(invoice, index) in recentGeneratedInvoices" :key="index"
-                                class="border-b border-border hover:bg-muted/10">
-                                <td class="py-3 px-4 text-sm font-medium">#{{ invoice.id }}</td>
-                                <td class="py-3 px-4 text-sm">#{{ invoice.orderId }}</td>
-                                <td class="py-3 px-4 text-sm">{{ invoice.customer }}</td>
-                                <td class="py-3 px-4 text-sm">{{ invoice.date }}</td>
-                                <td class="py-3 px-4 text-sm">${{ invoice.amount.toFixed(2) }}</td>
-                                <td class="py-3 px-4 text-sm">
-                                    <Badge :variant="getStatusVariant(invoice.status)">
-                                        {{ invoice.status }}
-                                    </Badge>
-                                </td>
-                                <td class="py-3 px-4 text-sm text-right">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <Button variant="outline" size="sm">
-                                            <Eye class="h-3.5 w-3.5 mr-1" />
-                                            View
-                                        </Button>
-                                        <Button variant="outline" size="sm">
-                                            <Send class="h-3.5 w-3.5 mr-1" />
-                                            Send
-                                        </Button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </CardContent>
-        </Card>
+        <div>
+            <!-- Invoice table -->
+            <InvoiceTable :recent-invoice="recentInvoices" />
+        </div>
+
+
+
     </div>
 
     <!-- View Order Dialog -->
@@ -164,14 +68,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import {
-    ChevronLeft,
-    ChevronRight,
     Download,
-    Eye,
-    FileText,
     RefreshCw,
     Search,
-    Send,
 } from 'lucide-vue-next'
 
 // Import shadcn-vue components
@@ -193,9 +92,13 @@ import Input from '@/components/ui/input/Input.vue'
 import { isNull } from 'lodash';
 import ApprovedOrdersTable from '@/components/FinanceDep/ApprovedOrdersTable.vue'
 import { router } from '@inertiajs/vue3'
+import Toaster from '@/components/ui/toast/Toaster.vue'
+import InvoiceTable from '@/components/FinanceDep/InvoiceTable.vue'
+import CreatePaymentTransactionDialog from '@/components/FinanceDep/CreatePaymentTransactionDialog.vue'
 
 const propsData = defineProps({
     approvedOrders: Array,
+    recentInvoices: Array,
 });
 
 
@@ -246,7 +149,6 @@ const invoices = [
 ]
 
 // Recent invoices for dashboard
-const recentInvoices = invoices.slice(0, 5)
 
 // Filtered invoices based on search and filters
 const filteredInvoices = computed(() => {

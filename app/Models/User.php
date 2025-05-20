@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\JobTitles;
+use App\Enums\UserRoles;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -50,5 +52,25 @@ class User extends Authenticatable
     function getRouteKeyName()
     {
         return 'employee_code';
+    }
+
+
+    function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    function invitedEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_user');
+    }
+
+
+    // SCOPES
+    function scopeEmployeesOnly($query)
+    {
+        return $query->whereDoesntHave('roles', function ($query) {
+            $query->where('name', UserRoles::ADMINISTRATOR->value);
+        });
     }
 }

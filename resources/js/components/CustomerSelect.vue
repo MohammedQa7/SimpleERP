@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col space-y-2">
         <UseTemplate>
-            <Command>
+            <Command :disabled="disabled">
                 <CommandInput placeholder="Find customer" />
                 <CommandList>
                     <CommandEmpty>No results found.</CommandEmpty>
@@ -16,7 +16,7 @@
         </UseTemplate>
 
         <Popover v-model:open="isOpen">
-            <PopoverTrigger as-child>
+            <PopoverTrigger as-child :disabled="disabled">
                 <Button variant="outline" class=" justify-start">
                     {{ selectedCustomer ? selectedCustomer.fullName :
                         preSelectedCustomer ? preSelectedCustomer.fullName : "Select a customer" }}
@@ -49,6 +49,7 @@ const emit = defineEmits();
 const propsData = defineProps({
     customers: Array,
     preSelectedCustomer: Object,
+    disabled: Boolean,
 })
 
 const onCustomerSelect = (customer) => {

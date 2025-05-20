@@ -46,6 +46,7 @@ const page = usePage<SharedData>();
                                 <SidebarMenuSubButton as-child
                                     :is-active="subItem.href == page.url ? item.isActive = true : false">
                                     <Link :href="subItem.href">
+                                    <component class="size-4" :is="subItem.icon" />
                                     <span>{{ subItem.title }} </span>
                                     </Link>
                                 </SidebarMenuSubButton>

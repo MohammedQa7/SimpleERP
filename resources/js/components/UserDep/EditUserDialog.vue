@@ -1,5 +1,5 @@
 <template>
-    <Dialog :open="isOpen">
+    <Dialog :open="isOpen" @update:open="isOpen = $event">
         <DialogContent :hide-close-button="true" class="sm:max-w-[525px] max-h-[80%] overflow-x-auto">
             <DialogHeader>
                 <DialogTitle>New Order</DialogTitle>
@@ -110,7 +110,6 @@
             </DialogClose>
         </DialogContent>
     </Dialog>
-
 </template>
 
 <script setup>
@@ -199,16 +198,6 @@ const bindSelectedRoles = (roles) => {
     form.roles = roles;
 }
 
-const CloseDialog = () => {
-    form.reset();
-    closeDialog(emit);
-
-}
-const closeOnEscape = (e) => {
-    if (e.key === 'Escape') {
-        closeDialog(emit);
-    }
-};
 
 
 const submit = () => {
@@ -246,13 +235,5 @@ watch(uploadedImage, (value) => {
     form.profilePhotoUrl = value;
 }, { deep: true });
 
-
-onMounted(() => {
-    document.addEventListener('keydown', closeOnEscape);
-});
-
-onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-})
 
 </script>
