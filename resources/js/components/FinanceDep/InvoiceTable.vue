@@ -83,21 +83,7 @@
 
             </div>
         </CardContent>
-        <CardFooter v-if="recentInvoice.data.length > 0" class="flex items-center justify-between p-4">
-            <div class="text-sm text-muted-foreground">
-                Showing <strong>{{ recentInvoice.meta.from }}</strong> to <strong>{{
-                    recentInvoice.meta.to }}</strong> of
-                <strong>{{ recentInvoice.meta.total }}</strong> results
-            </div>
-            <div class="flex items-center space-x-2">
-                <Link :href="recentInvoice.links.prev" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(recentInvoice.links.prev)">Previous</Button>
-                </Link>
-                <Link :href="recentInvoice.links.next" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(recentInvoice.links.next)">Next</Button>
-                </Link>
-            </div>
-        </CardFooter>
+        <CustomPagination :item="recentInvoice" />
     </Card>
 
     <InvoiceDetailsDialog v-if="showInvoiceDetails" :invoice="invoice" :is-loading="isLoading"

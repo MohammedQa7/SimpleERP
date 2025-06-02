@@ -50,8 +50,7 @@
                                         <Eye class="h-3.5 w-3.5 mr-1" />
                                         View
                                     </Button>
-                                    <Button size="sm"
-                                        @click="generateInvoice(order.orderNumber)"
+                                    <Button size="sm" @click="generateInvoice(order.orderNumber)"
                                         :disabled="isGeneratingInvoice.active">
                                         <Loader2 v-if="isGeneratingInvoice.active &&
                                             isGeneratingInvoice.orderNumber == order.orderNumber"
@@ -78,21 +77,8 @@
 
             </div>
         </CardContent>
-        <CardFooter v-if="approvedOrders.data.length > 0" class="flex items-center justify-between p-4">
-            <div class="text-sm text-muted-foreground">
-                Showing <strong>{{ approvedOrders.meta.from }}</strong> to <strong>{{ approvedOrders.meta.to }}</strong>
-                of
-                <strong>{{ approvedOrders.meta.total }}</strong> results
-            </div>
-            <div class="flex items-center space-x-2">
-                <Link :href="approvedOrders.links.prev" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(approvedOrders.links.prev)">Previous</Button>
-                </Link>
-                <Link :href="approvedOrders.links.next" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(approvedOrders.links.next)">Next</Button>
-                </Link>
-            </div>
-        </CardFooter>
+        <CustomPagination :item="approvedOrders" />
+
     </Card>
     <OrderDetailsDialog v-if="showOrderDetails" :order="order" :is-loading="isLoading" :is-open="showOrderDetails"
         @update:open="showOrderDetails = $event" />
@@ -115,6 +101,7 @@ import { toast } from '../ui/toast';
 import { isNull } from 'lodash';
 import CardTitle from '../ui/card/CardTitle.vue';
 import CardDescription from '../ui/card/CardDescription.vue';
+import CustomPagination from '../CustomPagination.vue';
 const showOrderDetails = ref(false);
 const isLoading = ref(false);
 const isGeneratingInvoice = ref({

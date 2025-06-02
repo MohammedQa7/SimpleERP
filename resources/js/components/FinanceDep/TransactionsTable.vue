@@ -61,7 +61,7 @@
                                         <span v-if="transaction.isSent">Sent</span>
                                         <span v-else>Send</span>
                                     </Button>
-                                
+
                                 </div>
                             </td>
                         </tr>
@@ -81,21 +81,7 @@
 
             </div>
         </CardContent>
-        <CardFooter v-if="transactions.data.length > 0" class="flex items-center justify-between p-4">
-            <div class="text-sm text-muted-foreground">
-                Showing <strong>{{ transactions.meta.from }}</strong> to <strong>{{
-                    transactions.meta.to }}</strong> of
-                <strong>{{ transactions.meta.total }}</strong> results
-            </div>
-            <div class="flex items-center space-x-2">
-                <Link :href="transactions.links.prev" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(transactions.links.prev)">Previous</Button>
-                </Link>
-                <Link :href="transactions.links.next" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(transactions.links.next)">Next</Button>
-                </Link>
-            </div>
-        </CardFooter>
+        <CustomPagination :item="transactions.data" />
     </Card>
 
     <TransactionDetailsDialog v-if="showTransactionDetails" :transaction="transaction" :is-loading="isLoading"

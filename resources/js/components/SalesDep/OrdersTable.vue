@@ -43,21 +43,7 @@
                 </div>
             </div>
         </CardContent>
-        <CardFooter class="flex items-center justify-between p-4">
-            <div class="text-sm text-muted-foreground">
-                Showing <strong>{{ orders.meta.from }}</strong> to <strong>{{ orders.meta.to }}</strong> of <strong>{{
-                    orders.meta.total
-                    }}</strong> results
-            </div>
-            <div class="flex items-center space-x-2">
-                <Link :href="orders.links.prev" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(orders.links.prev)">Previous</Button>
-                </Link>
-                <Link :href="orders.links.next" preserve-scroll>
-                <Button variant="outline" size="sm" :disabled="isNull(orders.links.next)">Next</Button>
-                </Link>
-            </div>
-        </CardFooter>
+        <CustomPagination :item="orders" />
     </Card>
 
     <DeleteDialog :open="deleteOrderDialogProps.isOpen"
@@ -86,6 +72,7 @@ import CardFooter from '../ui/card/CardFooter.vue'
 import { toast } from '../ui/toast'
 import DeleteDialog from '../DeleteDialog.vue'
 import AlertDialogAction from '../ui/alert-dialog/AlertDialogAction.vue'
+import CustomPagination from '../CustomPagination.vue'
 const editOrderDialog = ref(false);
 const deleteOrderDialogProps = ref({
     isOpen: false,
