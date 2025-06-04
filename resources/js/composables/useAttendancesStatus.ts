@@ -1,4 +1,4 @@
-export function getAttendancesStatusVariant(status: string) {
+export function getAttendancesStatusVariant(status: string): string {
     switch (status) {
         case 'Present': return 'bg-green-900 text-green-100'
         case 'Late': return 'bg-yellow-900 text-yellow-100'

@@ -1,4 +1,4 @@
-export function getLeaveRequestTypeClass(type: string) {
+export function getLeaveRequestTypeClass(type: string): string {
     switch (type.toLowerCase()) {
         case 'vacation':
             return 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
