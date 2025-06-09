@@ -34,8 +34,6 @@ html {
 
 
 
-
-
 @layer base {
 
     :root {
@@ -177,10 +175,14 @@ html {
         --website-secondary-foreground-light: 60 13% 94%;
     }
 
+
+
     body {
         letter-spacing: var(--tracking-normal);
     }
+
 }
+
 
 @layer base {
     * {
@@ -189,5 +191,7 @@ html {
 
     body {
         @apply bg-background text-foreground;
+
     }
+
 }
