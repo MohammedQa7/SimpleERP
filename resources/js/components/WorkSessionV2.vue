@@ -51,7 +51,7 @@
                                     </linearGradient>
                                 </defs>
                             </svg>
-                            <h1 class="">Work Session</h1>
+                            <h1 class="text-white dark:text-black ">Work Session</h1>
 
                         </div>
                     </div>
