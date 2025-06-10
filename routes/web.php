@@ -1,5 +1,7 @@
 <?php
 
+use App\Actions\AttachMediaToAnyModel;
+use App\Enums\MediaCollection;
 use App\Enums\UserRoles;
 use App\Http\Controllers\AdjustProductStockController;
 use App\Http\Controllers\ApproveStockRequestController;
@@ -19,7 +21,12 @@ use App\Http\Controllers\UploadTemporatyAttachmentsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseDepartment\ProductController;
 use App\Http\Controllers\WarehouseRequestController;
+use App\Models\PaymentTransaction;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -64,13 +71,8 @@ Route::middleware('auth')->group(function () {
         Route::get('statistics', HrStatisticsController::class)->name('hr.statistics');
     });
 
-
     // Folders / Files Mangers
     Route::resource('folders', FolderController::class)->names('folders');
-
-
-
-
 
     // Uploading Attachments
     Route::post('/attachments/upload', [UploadTemporatyAttachmentsController::class, 'uploadAttachments'])->name('upload');
@@ -82,9 +84,16 @@ Route::middleware('auth')->group(function () {
 
 
 
-Route::get('test', function () {
-    return Inertia::render('test');
-});
+Route::get('test', function (AttachMediaToAnyModel $action) {
+    // $payment = PaymentTransaction::find(2);
+    // $path = 'attachments/522jJTF2C6N8y63O92MWF1GA45x56AGiGZvsE5xK.png';
+    // $file = public_path('storage/' . $path);
+
+    // $action->handle($payment, $file, media_collection: MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS);
+
+
+    // return Inertia::render('test');
+})->middleware(['throttle:test']);
 
 Route::get('test2', function () {
     return Inertia::render('calendar');

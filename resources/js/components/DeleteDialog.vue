@@ -14,7 +14,6 @@
 
             <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-
                 <!-- Submit button -->
                 <slot />
             </AlertDialogFooter>

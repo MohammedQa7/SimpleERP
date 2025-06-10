@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\AttachMediaToAnyModel;
+use App\Actions\CreateRequiredFolders;
 use App\Actions\StoreAttachments;
+use App\Enums\FileAndFolderGlobalPaths;
 use App\Enums\InvoiceStatus;
+use App\Enums\MediaCollection;
+use App\Helpers\FilePathHelper;
 use App\Http\Requests\PaymentTransactionRequest;
 use App\Http\Resources\PaymentTransactionResource;
 use App\Models\Invoice;
@@ -34,7 +39,7 @@ class PaymentTransactionController extends Controller
         ]);
     }
 
-    function store(PaymentTransactionRequest $request, StoreAttachments $storeAttachments)
+    function store(Request $request, AttachMediaToAnyModel $attach_media_to_model, CreateRequiredFolders $create_required_folders)
     {
         try {
             DB::beginTransaction();
@@ -46,7 +51,11 @@ class PaymentTransactionController extends Controller
                 'notes' => $request->notes
             ]);
 
-            $storeAttachments->handle($payment_transaction, $request->attachments);
+            // Get files from temp directory and store them into the new one then attach it to the model
+            $attach_media_to_model->handle($payment_transaction, $request->attachments, MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS, false);
+
+            // store the same files in the file manager in order to keep track of all files and manage all files.
+            $create_required_folders->handle();
 
             $invoice->update([
                 'status' => InvoiceStatus::PAID->value,

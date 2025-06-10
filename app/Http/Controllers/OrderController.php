@@ -65,6 +65,7 @@ class OrderController extends Controller
         $stock_action = $checkStockAction->handle($data->orderItems);
 
 
+
         try {
             DB::beginTransaction();
             // Creating Order 
@@ -85,7 +86,10 @@ class OrderController extends Controller
             $orderAction->handle($order->id, $request->orderItems);
 
             // Notify Warehouse Department of out of stock items
-            event(new ProductOutOfStock($order, $stock_action->getStockItems(), Departments::SALES->value, $request->priority));
+            if ($stock_action->getIsAnyProductOutOfStock()) {
+                dd('test');
+                event(new ProductOutOfStock($order, $stock_action->getStockItems(), Departments::SALES->value, $request->priority));
+            }
 
             DB::commit();
         } catch (\Throwable $th) {

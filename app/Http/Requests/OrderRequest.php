@@ -33,8 +33,8 @@ class OrderRequest extends FormRequest
             'orderItems.*.productId' => ['sometimes', 'exists:products,id'],
             'orderItems.*.product.sku' => ['required', Rule::exists('products', 'sku')],
             'orderItems.*.quantity' => ['required', 'integer', 'min:1'],
-            'notes' => ['sometimes'],
-            'priority' => ['sometimes', new Enum(WarehousePriority::class)],
+            'notes' => ['nullable'],
+            'priority' => ['nullable', new Enum(WarehousePriority::class)],
             'isAnyProductOutOfStock' => ['boolean', 'required'],
         ];
 

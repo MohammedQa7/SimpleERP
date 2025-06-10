@@ -24,7 +24,10 @@ class EmployeeController extends Controller
     {
         $employees = User::whereDoesntHave('roles', function ($query) {
             $query->where('name', UserRoles::ADMINISTRATOR->value);
-        })->paginate(5)->withQueryString();
+        })
+            ->paginate(5)
+            ->withQueryString();
+
         return Inertia::render('HrDepartment/Employees', [
             'employees' => UserResource::collection($employees),
             'departments' => Departments::toArray(),

@@ -1,6 +1,9 @@
 <template>
     <div class="space-y-5">
+        <!-- Statistics cards -->
         <Statistics :total-employees="totalEmployees" />
+
+        
         <!-- Charts Row -->
         <ChartStatistics />
 

@@ -38,7 +38,7 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'phone_number' => $request->phoneNumber,
-                'employee_code' => 'EMP-' . rand(0, 100000),
+                'account_code' => 'EMP-' . rand(0, 100000),
                 'job_title' => $request->jobTitle,
                 'address' => $request->address,
                 'salary' => $request->salary,

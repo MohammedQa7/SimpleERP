@@ -2,7 +2,7 @@
     <Dialog :open="isOpen" @update:open="isOpen = $event">
         <DialogContent :hide-close-button="true" class="sm:max-w-[525px] max-h-[80%] overflow-x-auto">
             <DialogHeader>
-                <DialogTitle>New Order</DialogTitle>
+                <DialogTitle>Edit user</DialogTitle>
             </DialogHeader>
 
             <UseresSkelaton v-if="isLoading" />
@@ -95,7 +95,7 @@
                 </div>
 
                 <div class="flex space-x-2">
-                    <Button @click.prevent="CloseDialog" variant="outline">Cancel</Button>
+                    <Button variant="outline">Cancel</Button>
                     <Button @click.prevent="submit" :disabled="form.processing">
                         {{ form.processing ? 'Updating ...' : 'Update Order' }}
                     </Button>
@@ -103,7 +103,7 @@
 
             </form>
 
-            <DialogClose @click.prevent="CloseDialog"
+            <DialogClose
                 class="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
                 <X class="w-4 h-4" />
                 <span class="sr-only">Close</span>
@@ -205,7 +205,7 @@ const submit = () => {
         ? (delete form.password, delete form.password_confirmation)
         : '';
 
-    form.put(route('users.update', { user: propsData.user.employeeCode }), {
+    form.put(route('users.update', { user: propsData.user.accountCode }), {
         onSuccess: () => {
             closeDialog(emit)
             toast({

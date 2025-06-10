@@ -16,8 +16,8 @@ class EventResource extends JsonResource
     public function toArray(Request $request): array
     {
         !$request->routeIs(route('events.calendar'))
-            ? $this->start_date = Carbon::parse($this->start_date)
-            : '';
+        ? $this->start_date = Carbon::parse($this->start_date)
+        : '';
 
         $this->starts_at = Carbon::parse($this->starts_at)->format('h:i A');
         $this->ends_at = Carbon::parse($this->ends_at)->format('h:i A');

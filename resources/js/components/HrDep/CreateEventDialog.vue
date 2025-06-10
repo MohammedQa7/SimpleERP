@@ -125,6 +125,10 @@ const form = useForm({
 
 const bindCalendarDate = (date) => {
     const formatedDate = new Date(date.value);
+    formatedDate.setTime(startsAt.value.getTime());
+    console.log(formatedDate);
+    
+
     form.startDate = formatedDate.toISOString().slice(0, 19).replace("T", " ");
 }
 const bindSelectedUsers = (user) => {

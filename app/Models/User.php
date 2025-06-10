@@ -51,7 +51,7 @@ class User extends Authenticatable
 
     function getRouteKeyName()
     {
-        return 'employee_code';
+        return 'account_code';
     }
 
 

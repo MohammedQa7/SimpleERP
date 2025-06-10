@@ -30,7 +30,7 @@ class EventRequest extends FormRequest
             'startsAt' => ['required', 'date'],
             'endsAt' => ['required', 'date'],
             'attendances' => ['required', 'array'],
-            'attendances.*' => ['required', 'exists:users,employee_code'],
+            'attendances.*' => ['required', 'exists:users,account_code'],
             'priority' => ['required', new Enum(Priorities::class)],
         ];
     }

@@ -60,7 +60,7 @@
                             <DropdownMenuContent class=" me-12">
                                 <DropdownMenuLabel>Modifications</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem @click.prevent="toggleEditUserDialog(true, user.employeeCode)">
+                                <DropdownMenuItem @click.prevent="toggleEditUserDialog(true, user.accountCode)">
                                     <Edit2 />
                                     Edit
                                 </DropdownMenuItem>
