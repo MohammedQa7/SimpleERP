@@ -1,2 +1,2 @@
 
-![Screenshot 2024-11-12 at 20-32-35 Laravel](https://github.com/user-attachments/assets/721a566a-8ae4-4822-b58b-cebd8bcc59c0)
+![Thumbnail](https://github.com/user-attachments/assets/b3554594-15a1-4b33-adf1-f20302a67566)
