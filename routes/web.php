@@ -21,6 +21,7 @@ use App\Http\Controllers\UploadTemporatyAttachmentsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseDepartment\ProductController;
 use App\Http\Controllers\WarehouseRequestController;
+use App\Models\Invoice;
 use App\Models\PaymentTransaction;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/attachments/upload', [UploadTemporatyAttachmentsController::class, 'uploadAttachments'])->name('upload');
     Route::post('/attachments/revert', [UploadTemporatyAttachmentsController::class, 'revertAttachments'])->name('revert');
     // Download Invoices.
-    Route::get('/attachment/download/{invoice}', DownloadInvoicesController::class)->name('download');
+    Route::get('/attachment/download/{media}', DownloadInvoicesController::class)->name('download');
 
 });
 
@@ -93,7 +94,7 @@ Route::get('test', function (AttachMediaToAnyModel $action) {
 
 
     // return Inertia::render('test');
-})->middleware(['throttle:test']);
+});
 
 Route::get('test2', function () {
     return Inertia::render('calendar');

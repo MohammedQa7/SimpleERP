@@ -11,4 +11,10 @@ class FilePathHelper
     {
         return $base_path->value . implode('/', $segemnts) . '/';
     }
+
+
+    public static function buildCustomerUploadPath(FileAndFolderGlobalPaths $base_path, array $segemnts, $customer_code)
+    {
+        return "customers/{$customer_code}/" . $base_path->value . implode('/', []) . '/';
+    }
 }

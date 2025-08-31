@@ -61,10 +61,7 @@
                                         <span v-if="transaction.isSent">Sent</span>
                                         <span v-else>Send</span>
                                     </Button>
-                                    <Button @click.prevent="download(transaction.paymentNumber)" size="sm">
-                                        <Download class="h-3.5 w-3.5 mr-1" />
-                                        <span>Download</span>
-                                    </Button>
+                                
                                 </div>
                             </td>
                         </tr>
@@ -102,7 +99,7 @@
     </Card>
 
     <TransactionDetailsDialog v-if="showTransactionDetails" :transaction="transaction" :is-loading="isLoading"
-        :is-open="showTransactionDetails" @update:open="showTransactionDetails = $event;console.log('close')" />
+        :is-open="showTransactionDetails" @update:open="showTransactionDetails = $event; console.log('close')" />
 </template>
 
 <script setup>
@@ -144,10 +141,7 @@ const viewTransaction = (selectedTransaction) => {
     showTransactionDetails.value = true;
 }
 
-const download = (invoiceNumber) => {
-    const url = route('download', { invoice: invoiceNumber });
-    window.location.href = url
-}
+
 
 
 

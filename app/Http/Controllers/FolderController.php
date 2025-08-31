@@ -48,8 +48,8 @@ class FolderController extends Controller
      */
     public function show(Folder $folder)
     {
-        $folder->load('subFolders.parentFolder', 'parentFolder.parentFolder');
-
+        $folder->load('media', 'subFolders.parentFolder', 'parentFolder.parentFolder');
+        
         return Inertia::render('FileManager/SingleFolder', [
             'folder' => new FolderResource($folder),
         ]);

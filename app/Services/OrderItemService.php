@@ -17,13 +17,29 @@ class OrderItemService
         $this->priceAction = $action;
     }
 
+    function createOrUpdateOrderItems(Order $order, $order_items)
+    {
+        foreach ($order_items as $item) {
+            $product = Product::where('sku', $item['product']['sku'])->firstOrFail();
+            $order->orderItems()->updateOrCreate(
+                [
+                    'id' => $item['orderItemId']
+                ],
+                [
+                    'product_id' => $product->id,
+                    'quantity' => $item['quantity'],
+                    'total_amount' => $product->selling_price * $item['quantity'],
+                ]
+            );
+        }
+    }
+
+    // OLD WAY TO HANDLE THE ORDER CREATION
     function createNewItems($order, $order_items)
     {
         $new_items = array_filter($order_items, function ($item) {
             return $item['orderItemId'] == null;
         });
-
-
 
 
         foreach ($new_items as $item) {
@@ -36,10 +52,10 @@ class OrderItemService
         }
     }
 
+    // OLD WAY TO HANDLE THE ORDER UPDATE
     function updateOrderItems($order, $order_items)
     {
 
-        dd($order , $order_items);
         $existing_order_items = array_column($order->orderItems->toArray(), 'id');
         $order_items_to_update = array_filter($order_items, function ($item) use ($existing_order_items) {
             return in_array($item['orderItemId'], $existing_order_items);
@@ -62,6 +78,7 @@ class OrderItemService
 
     function getRemovedItems($order, $order_items)
     {
+
         $new_order_list_id = array_column($order_items, 'orderItemId');
 
         $removed_items = array_filter($order->orderItems->toArray(), function ($item) use ($new_order_list_id) {
@@ -69,7 +86,6 @@ class OrderItemService
         });
 
         return array_column($removed_items, 'id');
-
     }
 
 

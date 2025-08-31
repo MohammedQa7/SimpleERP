@@ -39,13 +39,13 @@ class PaymentTransaction extends Model implements HasMedia
             ->nonQueued();
     }
 
-    function invoice()
-    {
-        return $this->belongsTo(Invoice::class);
-    }
+    // function invoice()
+    // {
+    //     return $this->belongsTo(Invoice::class);
+    // }
 
-    public function attachments(): MorphMany
+    public function modelable()
     {
-        return $this->morphMany(Attachment::class, 'attachable');
+        return $this->morphTo();
     }
 }

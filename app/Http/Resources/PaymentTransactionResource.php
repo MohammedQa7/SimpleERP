@@ -15,8 +15,9 @@ class PaymentTransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'invoice' => new InvoiceResource($this->whenLoaded('invoice')),
-            'attachments' => AttachmentResource::collection($this->whenLoaded('attachments')),
+            'invoice' => new InvoiceResource($this->whenLoaded('modelable')),
+            'attachments' => AttachmentResource::collection($this->getMedia("*")),
+            'receiptFile' => new AttachmentResource($this->getFirstMedia("receipt_payment")),
             'paymentNumber' => $this->payment_number,
             'paymentMethod' => $this->method,
             'notes' => $this->notes,

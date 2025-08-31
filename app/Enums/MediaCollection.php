@@ -6,6 +6,7 @@ enum MediaCollection: string
 {
     case INVOICES = 'invoices';
     case PAYMENT_TRANSACTIONS_ATTACHMENTS = 'payment_transactions_attachments';
+    case RECEIPT_PAYMENT = 'receipt_payment';
 
 
     static function toArray()

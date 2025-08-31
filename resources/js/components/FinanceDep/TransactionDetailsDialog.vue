@@ -50,28 +50,36 @@
                 <!-- Attachments Section -->
                 <div class="grid gap-2">
                     <h3 class="text-lg font-medium">Attachments</h3>
-                    <div class="border rounded-md p-4">
+                    <div class="border rounded-md ">
                         <div v-if="transaction.attachments.length > 0">
                             <div v-for="(attachment, index) in transaction.attachments" :key="index"
-                                class="flex items-center justify-between py-2 group">
-                                <div class="flex items-center gap-3">
-                                    <div class="h-9 w-9 rounded-md bg-muted flex items-center justify-center">
-                                        <FileText v-if="attachment.type === 'application/pdf'" class="h-5 w-5" />
-                                        <Image v-else-if="attachment.type === 'image/png'" class="h-5 w-5" />
-                                        <File v-else class="h-5 w-5" />
+                                class="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2 px-2 sm:px-0 group rounded-lg sm:rounded-none hover:bg-primary/50 sm:hover:bg-transparent transition-all">
+                                <!-- File info section -->
+                                <div class="flex items-center gap-3 min-w-0 flex-1">
+                                    <div
+                                        class="h-9 w-9 rounded-md bg-muted flex items-center justify-center flex-shrink-0">
+                                        <FileText v-if="attachment.type === 'application/pdf'"
+                                            class="h-5 w-5 text-gray-600" />
+                                        <Image v-else-if="attachment.type === 'image/png'"
+                                            class="h-5 w-5 text-gray-600" />
+                                        <File v-else class="h-5 w-5 text-gray-600" />
                                     </div>
-                                    <div>
-                                        <p class="font-medium break-words whitespace-normal">{{ attachment.name }}</p>
-                                        <p class="text-xs text-muted-foreground">{{ attachment.size }}</p>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="font-medium break-words text-sm sm:text-base leading-tight">
+                                            {{ attachment.name }}
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-0.5">{{ attachment.size }}</p>
                                     </div>
                                 </div>
-                                <div class="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <Button @click.prevent="downloadAttachment(attachment.id)" variant="ghost"
-                                        size="icon">
+
+                                <!-- Action buttons -->
+                                <div
+                                    class="flex gap-2 mt-2 sm:mt-0 sm:ml-4 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity self-end sm:self-center">
+                                    <Button @click.prevent="download(attachment.id)" variant="ghost" size="icon">
                                         <Download class="h-4 w-4" />
                                     </Button>
-                                    <Button v-if="attachment.type == 'image/png'"
-                                        @click.prevent="previewAttachment(attachment)" variant="ghost" size="icon">
+                                    <!-- v-if="attachment.type == 'image/png'" -->
+                                    <Button @click.prevent="previewAttachment(attachment)" variant="ghost" size="icon">
                                         <Eye class="h-4 w-4" />
                                     </Button>
                                 </div>
@@ -87,15 +95,17 @@
 
             <DialogFooter>
                 <DialogClose>
-                    <Button variant="outline">Close</Button>
+                    <Button class="w-full mb-2" variant="outline">Close</Button>
                 </DialogClose>
-                <Button @click.prevent="downloadReceipt(transaction.invoice.invoiceNumber)">Download Receipt</Button>
+
+                <Button @click.prevent="downloadReceipt(transaction.receiptFile.id)" class="mb-2 md:mb-0">Download
+                    Receipt</Button>
             </DialogFooter>
         </DialogContent>
 
         <!-- Image Preview Modal -->
         <Dialog v-if="previewOpen" :open="previewOpen" @update:open="previewOpen = $event">
-            <DialogContent class="sm:max-w-[800px] max-h-[90vh] overflow-hidden">
+            <DialogContent class="sm:max-w-[800px]  overflow-hidden">
                 <DialogHeader>
                     <DialogTitle>{{ currentPreview ? currentPreview.name : 'Image Preview' }}
                     </DialogTitle>
@@ -104,21 +114,30 @@
                     </DialogDescription>
                 </DialogHeader>
 
-                <div class="flex items-center justify-center p-2 overflow-auto max-h-[70vh]">
-                    <img v-if="currentPreview && currentPreview.path" :src="currentPreview.path"
+                <div class="flex items-center justify-center p-2 overflow-auto">
+
+                    <!-- IMAGES -->
+                    <img v-if="currentPreview.type == 'image/png' && currentPreview.path" :src="currentPreview.path"
                         :alt="currentPreview.name" class="max-w-full max-h-[65vh] object-contain rounded-md"
                         loading="lazy" />
-                    <div v-else class="text-center py-12 text-muted-foreground">
+
+                    <!-- PDF's -->
+                    <iframe v-else-if="currentPreview.type == 'application/pdf'" :src="currentPreview.path"
+                        class="w-full h-[65vh]  rounded-b" frameborder="0"></iframe>
+
+                    <div v-else class="text-center py-12 text-muted-foreground space-y-5">
                         <ImageOff class="h-16 w-16 mx-auto mb-4" />
-                        <p>Unable to preview this image</p>
+                        <p>Unable to preview </p>
                     </div>
                 </div>
+
+
 
                 <DialogFooter>
                     <DialogClose>
                         <Button variant="outline">Close</Button>
                     </DialogClose>
-                    <Button v-if="currentPreview && currentPreview.path" @click="downloadAttachment(currentPreview.id)">
+                    <Button v-if="currentPreview && currentPreview.path" @click="download(currentPreview.id)">
                         <Download class="h-4 w-4 mr-2" />
                         Download
                     </Button>
@@ -156,20 +175,21 @@ const isDialogOpened = computed(() => {
 })
 
 const previewAttachment = (attachment) => {
+    currentPreview.value = attachment
+    previewOpen.value = true
     // Only allow preview for image types
-    if (attachment.type == 'image/png') {
-        currentPreview.value = attachment
-        previewOpen.value = true
-    }
+    // if (attachment.type == 'image/png') {
+    //  
+    // }
 }
-const downloadReceipt = (invoiceNumber) => {
-    const url = route('download', { invoice: invoiceNumber });
-    window.location.href = url
-}
-const downloadAttachment = (attachmentId) => {
-    const url = route('download-attachments', { attachment: attachmentId });
+const downloadReceipt = (mediaFile) => {
+    const url = route('download', { media: mediaFile });
     window.location.href = url
 }
 
+const download = (mediaFile) => {
+    const url = route('download', { media: mediaFile });
+    window.location.href = url
+}
 
 </script>

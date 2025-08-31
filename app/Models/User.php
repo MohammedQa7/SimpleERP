@@ -65,6 +65,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Event::class, 'event_user');
     }
 
+    public function paymentTransaction()
+    {
+        return $this->morphToMany(PaymentTransaction::class, 'model');
+    }
 
     // SCOPES
     function scopeEmployeesOnly($query)

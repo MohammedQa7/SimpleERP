@@ -253,10 +253,10 @@
                                         you absolutely sure?
                                     </AlertDialogTitle>
                                     <AlertDialogDescription>
-                                        There is a product that is out of stock, the <b>warehouse</b> will be notified
+                                        There is a product that is out of stock, the <b>Warehouse</b> will be notified
                                         to
                                         restock it, and
-                                        the order will be placed on <b>hold</b> in the meantime.
+                                        the order will be placed on <b>Hold</b> in the meantime.
                                     </AlertDialogDescription>
                                 </AlertDialogHeader>
 

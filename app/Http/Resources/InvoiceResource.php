@@ -17,6 +17,7 @@ class InvoiceResource extends JsonResource
         return [
             'invoiceNumber' => $this->invoice_number,
             'order' => new OrderResource($this->whenLoaded('order')),
+            'invoiceFile' => $this->getFirstMedia('*'),
             'status' => $this->status,
             'isSend' => $this->is_sent,
             'endsAt' => when(!is_null($this->ends_at), function () {

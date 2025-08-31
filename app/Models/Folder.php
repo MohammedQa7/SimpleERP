@@ -11,6 +11,10 @@ class Folder extends Model
         'created_at',
     ];
 
+    function media()
+    {
+        return $this->belongsToMany(Media::class, 'folder_media');
+    }
 
     function parentFolder()
     {

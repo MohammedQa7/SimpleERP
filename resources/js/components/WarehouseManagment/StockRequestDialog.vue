@@ -43,13 +43,25 @@
                         </div>
                     </div>
 
-                    <div>
-                        <p class="text-sm font-medium">Reason</p>
-                        <p class="text-sm">{{ stockRequest.reason }}
-                            <span v-if="!stockRequest.reasons" class="text-muted-foreground italic">no reason was
-                                provided</span>
-                        </p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium">Reason</p>
+                            <p class="text-sm">{{ stockRequest.reason }}
+                                <span v-if="!stockRequest.reasons" class="text-muted-foreground italic">No reason was
+                                    provided</span>
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Note</p>
+                            <p class="text-sm">{{ stockRequest.notes }}
+                                <span v-if="!stockRequest.notes" class="text-muted-foreground italic">No note was
+                                    provided</span>
+                            </p>
+                        </div>
                     </div>
+
+
 
                     <div class="space-y-2">
                         <p class="text-sm font-medium">Priority</p>
@@ -58,7 +70,7 @@
                         </Badge>
                     </div>
 
-                    <div>
+                    <div v-if="stockRequest.status == 'Pending'">
                         <Label>Approval Notes</Label>
                         <Textarea v-model="approvalNotes" placeholder="Add notes for approval or rejection" rows="2"
                             class="mt-1" />
@@ -66,7 +78,7 @@
                 </div>
             </div>
             <DialogFooter>
-                <div class="flex gap-2 w-full">
+                <div v-if="stockRequest.status == 'Pending'" class="flex gap-2 w-full">
                     <Button @click.prevent="emit('rejectRequest', stockRequest)" variant="outline" class="flex-1">
                         Reject
                     </Button>

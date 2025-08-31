@@ -60,7 +60,7 @@
                                         <span v-if="invoice.isSent">Sent</span>
                                         <span v-else>Send</span>
                                     </Button>
-                                    <Button @click.prevent="download(invoice.invoiceNumber)" size="sm">
+                                    <Button @click.prevent="download(invoice.invoiceFile)" size="sm">
                                         <Download class="h-3.5 w-3.5 mr-1" />
                                         <span>Download</span>
                                     </Button>
@@ -143,8 +143,8 @@ const viewInvoice = (selectedInvoice) => {
     showInvoiceDetails.value = true;
 }
 
-const download = (invoiceNumber) => {
-    const url = route('download', { invoice: invoiceNumber });
+const download = (invoiceFile) => {
+    const url = route('download', { media: invoiceFile });
     window.location.href = url
 }
 

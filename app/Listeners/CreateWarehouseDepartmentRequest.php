@@ -29,8 +29,8 @@ class CreateWarehouseDepartmentRequest
     {
         foreach ($event->stockItems as $item_sku => $value) {
             $product = Product::where('sku', $item_sku)->firstOrFail();
-            $isThereRequest = WarehouseRequests::isTherePrevoiusRequest($event->order, $product)->exists();
-            if (!$isThereRequest) {
+            $isTherePreviousRequest = WarehouseRequests::isTherePrevoiusRequest($event->order, $product)->exists();
+            if (!$isTherePreviousRequest) {
                 WarehouseRequests::create([
                     'user_id' => auth()->id(),
                     'order_id' => $event->order->id,
@@ -39,6 +39,7 @@ class CreateWarehouseDepartmentRequest
                     'status' => WarehouseStatus::PENDING->value,
                     'priority' => $event->priority,
                     'requested_quantity' => $value['stock'],
+                    'notes' => $event->note ?? null,
                 ]);
             }
         }

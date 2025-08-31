@@ -23,6 +23,7 @@ class ProductOutOfStock
         public $stockItems,
         public $department,
         public $priority,
+        public $note,
     ) {
         //
     }

@@ -87,8 +87,8 @@ class OrderController extends Controller
 
             // Notify Warehouse Department of out of stock items
             if ($stock_action->getIsAnyProductOutOfStock()) {
-                dd('test');
-                event(new ProductOutOfStock($order, $stock_action->getStockItems(), Departments::SALES->value, $request->priority));
+
+                event(new ProductOutOfStock($order, $stock_action->getStockItems(), Departments::SALES->value, $request->priority , $request->notes));
             }
 
             DB::commit();
@@ -122,14 +122,13 @@ class OrderController extends Controller
     function update(OrderRequest $request, Order $order, OrderItemService $orderItemService, CalculateTotalPriceForProducts $priceAction, IsProductOutOfStock $checkStockAction)
     {
         $this->authorize('update', [Order::class, $order]);
-
         $order->load('orderItems');
         $data = fluent($request->validated());
         $is_any_product_out_of_stock = $checkStockAction->handle($data->orderItems)->getIsAnyProductOutOfStock();
 
+        // Update the order 
         try {
             DB::beginTransaction();
-            // // Update the order 
             $order->update([
                 'customer_id' => $data->customerId,
                 'total_price' => $priceAction->handle($request->orderItems),
@@ -143,11 +142,7 @@ class OrderController extends Controller
             ]);
 
 
-            // Get new items and create them
-            $orderItemService->createNewItems($order, $data->orderItems);
-
-            // Update existing order items
-            $orderItemService->updateOrderItems($order, $data->orderItems);
+            $orderItemService->createOrUpdateOrderItems($order, $data->orderItems);
 
             // Get the deleted items and delete them
             $removed_item_list = $orderItemService->getRemovedItems($order, $data->orderItems);

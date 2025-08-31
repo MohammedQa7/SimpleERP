@@ -17,6 +17,7 @@ class FolderResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'attachments' => AttachmentResource::collection($this->whenLoaded('media')),
             'parentFolder' => when($this->whenLoaded('parentFolder'), function () {
                 return new FolderResource($this->whenLoaded('parentFolder'));
             }),

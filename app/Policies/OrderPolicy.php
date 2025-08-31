@@ -28,9 +28,9 @@ class OrderPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, Order $order): bool
     {
-        return false;
+        return $order->status->value == OrderStatus::APPROVED->value && !$order->hasInvoice();
     }
 
     /**

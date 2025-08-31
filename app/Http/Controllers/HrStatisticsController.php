@@ -18,7 +18,7 @@ class HrStatisticsController extends Controller
         $upcoming_events = Event::where('start_date', '>', now())->orderBy('start_date')->limit(5)->get();
 
         return Inertia::render('HrDepartment/Index', [
-            'DepartmentEmployeesRate' => $hr_statistics_service->getDepratmentsEmployeesCount(),
+            'departmentEmployeesCount' => $hr_statistics_service->getDepratmentsEmployeesCount(),
             'upcomingEvents' => EventResource::collection($upcoming_events),
             'totalEmployees' => $hr_statistics_service->getAllEmployees(),
         ]);

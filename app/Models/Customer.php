@@ -15,4 +15,9 @@ class Customer extends Model
     {
         return $this->hasMany(Order::class);
     }
+
+    public function paymentTransaction()
+    {
+        return $this->morphToMany(PaymentTransaction::class, 'model');
+    }
 }

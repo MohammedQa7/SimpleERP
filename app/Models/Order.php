@@ -47,6 +47,11 @@ class Order extends Model
         return $this->hasOne(Invoice::class);
     }
 
+    function hasInvoice()
+    {
+        return $this->invoice()->exists();
+    }
+
     // Scopes
     function scopeOnlyApprovedOrders($query)
     {

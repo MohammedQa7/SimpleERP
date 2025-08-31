@@ -2,13 +2,10 @@
 
 namespace App\Classes;
 
-use App\Actions\AttachMediaToAnyModel;
 use App\Enums\FileAndFolderGlobalPaths;
 use App\Enums\MediaCollection;
 use App\Helpers\FilePathHelper;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
+use App\Models\Invoice;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\Support\PathGenerator\PathGenerator;
 
@@ -24,21 +21,46 @@ class CustomPathGenerator implements PathGenerator
         switch ($collection) {
 
             case MediaCollection::INVOICES->value:
+                $model->load('order.customer');
 
-                $model->load('invoice.order.customer');
-                $username = $model->invoice->order->customer->full_name;
-                $customer_code = $model->invoice->order->customer->customer_code;
 
-                return FilePathHelper::build(FileAndFolderGlobalPaths::INVOICE_FOLDER_PATH, [$username, $customer_code]);
+                $username = $model->order->customer->full_name;
+                $customer_code = $model->order->customer->customer_code;
+
+                return FilePathHelper::buildCustomerUploadPath(FileAndFolderGlobalPaths::CUSTOMERS_INVOICES_PATH, [], $customer_code);
 
 
             case MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS->value:
 
-                $model->load('invoice.order.customer');
-                $username = $model->invoice->order->customer->full_name;
-                $customer_code = $model->invoice->order->customer->customer_code;
+                $model->load([
+                    'modelable' =>
+                    function ($morphTo) {
+                        $morphTo->morphWith([
+                            Invoice::class => ['order.customer'],
+                        ]);
+                    }
+                ]);
 
-                return FilePathHelper::build(FileAndFolderGlobalPaths::PAYMENT_TRANSACTIONS_FOLDER_PATH, [$username, $customer_code]);
+                $username = $model->modelable->order->customer->full_name;
+                $customer_code = $model->modelable->order->customer->customer_code;
+
+                return FilePathHelper::buildCustomerUploadPath(FileAndFolderGlobalPaths::CUSTOMERS_PROOF_OF_PAYMENT_PATH, [], $customer_code);
+
+            case MediaCollection::RECEIPT_PAYMENT->value:
+
+                $model->load([
+                    'modelable' =>
+                    function ($morphTo) {
+                        $morphTo->morphWith([
+                            Invoice::class => ['order.customer'],
+                        ]);
+                    }
+                ]);
+
+                $username = $model->modelable->order->customer->full_name;
+                $customer_code = $model->modelable->order->customer->customer_code;
+
+                return FilePathHelper::buildCustomerUploadPath(FileAndFolderGlobalPaths::CUSTOMERS_RECEIPT_PATH, [], $customer_code);
 
             default:
                 dd('e13123213ts');

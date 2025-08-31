@@ -21,10 +21,8 @@
                 </div>
             </CardHeader>
             <CardContent>
-                <div class="h-[240px] w-full bg-muted/20 rounded-md flex items-center justify-center">
-                    <BarChart class="h-8 w-8 text-muted-foreground" />
-                    <span class="ml-2 text-muted-foreground">Revenue Chart</span>
-                </div>
+                <AreaChart :data="data" index="name" :categories="['revenue', 'expenses']" />
+
             </CardContent>
         </Card>
         <Card>
@@ -105,14 +103,26 @@ import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import AreaChart from '@/components/ui/chart-area/AreaChart.vue';
+import LineChart from '@/components/ui/chart-line/LineChart.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { AlertCircle, BarChart, CheckCircle, ChevronRight, Clock, LineChart, TrendingDown, TrendingUp } from 'lucide-vue-next';
+import { ChevronRight, } from 'lucide-vue-next';
 const propsData = defineProps({
     salesSummary: Array,
     invoiceSummary: Array,
     dailyCashFlow: Array,
 
 });
+
+const data = [
+    { name: 'Jan', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'Feb', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'Mar', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'Apr', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'May', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'Jun', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+    { name: 'Jul', revenue: Math.floor(Math.random() * 5000) + 2000, expenses: Math.floor(Math.random() * 3000) + 1000 },
+];
+
 defineOptions({
     layout: AppLayout,
 })

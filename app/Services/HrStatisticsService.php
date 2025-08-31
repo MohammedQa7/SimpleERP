@@ -43,7 +43,13 @@ class HrStatisticsService
             return count($user);
         });
 
-        return $employees_per_department;
+        $employees_array = [];
+        foreach ($employees_per_department as $key => $value) {
+            $employees_array[$key]['department'] = $key;
+            $employees_array[$key]['count'] = $value;
+        }
+
+        return array_values($employees_array);
     }
 
 
