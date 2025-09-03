@@ -16,7 +16,6 @@ class AttachMediaToFolder
 
     }
 
-
     function attachToInvoiceFolder($media_files, $parent_folder_id)
     {
         $invoice_folder = Folder::where('name', 'invoices')

@@ -44,7 +44,7 @@ const page = usePage<SharedData>();
                         <SidebarMenuSub>
                             <SidebarMenuSubItem v-for="subItem in item.subItems" :key="item.title">
                                 <SidebarMenuSubButton as-child
-                                    :is-active="subItem.href == page.url ? item.isActive = true : false">
+                                    :is-active="subItem.href == page.props.ziggy.location ? item.isActive = true : false">
                                     <Link :href="subItem.href">
                                     <component class="size-4" :is="subItem.icon" />
                                     <span>{{ subItem.title }} </span>

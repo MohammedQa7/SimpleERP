@@ -1,10 +1,11 @@
 <?php
 
 use App\Actions\AttachMediaToAnyModel;
-use App\Enums\MediaCollection;
 use App\Enums\UserRoles;
 use App\Http\Controllers\AdjustProductStockController;
 use App\Http\Controllers\ApproveStockRequestController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceLogController;
 use App\Http\Controllers\DownloadAttachmentController;
 use App\Http\Controllers\DownloadInvoicesController;
 use App\Http\Controllers\EmployeeController;
@@ -21,13 +22,7 @@ use App\Http\Controllers\UploadTemporatyAttachmentsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WarehouseDepartment\ProductController;
 use App\Http\Controllers\WarehouseRequestController;
-use App\Models\Invoice;
-use App\Models\PaymentTransaction;
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -35,6 +30,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware('auth')->group(function () {
+
     // Sales Department
     Route::middleware(['role:' . UserRoles::ADMINISTRATOR->value . '|' . UserRoles::SALES_MANAGER->value])->prefix('sales')->group(function () {
         Route::resource('orders', OrderController::class)->names('orders');
@@ -55,20 +51,29 @@ Route::middleware('auth')->group(function () {
 
     // Inventory Department
     Route::middleware(['role:' . UserRoles::ADMINISTRATOR->value . '|' . UserRoles::INVENTORY_MANAGER->value, 'password.confirm'])->prefix('inventory')->group(function () {
+        // Products
         Route::resource('products', ProductController::class)->names('products');
-        Route::post('product/{product}/stock/adjustment', AdjustProductStockController::class)->name('stock.adjust');
         Route::get('product/history/{product}', ProductHistoryController::class)->name('product.history');
+        Route::get('warehouse/notificaions', [WarehouseRequestController::class, 'notificaions'])->name('warehouse.notificaions');
+
+        // Actions
+        Route::post('product/{product}/stock/adjustment', AdjustProductStockController::class)->name('stock.adjust');
         Route::post('approve/{stock_request}/request', ApproveStockRequestController::class)->name('approve.stock.request');
         Route::post('reject/{stock_request}/request', RejectStockRequestController::class)->name('reject.stock.request');
-        Route::get('warehouse/notificaions', [WarehouseRequestController::class, 'notificaions'])->name('warehouse.notificaions');
     });
 
-
-    // Inventory Department
+    // HR Department
     Route::middleware(['role:' . UserRoles::ADMINISTRATOR->value . '|' . UserRoles::HR_MANAGER->value])->prefix('hr')->group(function () {
+        // Employees
         Route::resource('employees', EmployeeController::class)->names('employees');
+        Route::resource('attendances/logs', AttendanceLogController::class)->except(['destroy', 'create', 'edit', 'update'])->names('attendances.logs');
+        Route::resource('attendances', AttendanceController::class)->names('attendances');
+
+        // Events
         Route::resource('events', EventsController::class)->except('index')->names('events');
         Route::get('calendar/events', [EventsController::class, 'index'])->name('events.calendar');
+
+        // Statistics
         Route::get('statistics', HrStatisticsController::class)->name('hr.statistics');
     });
 
@@ -93,7 +98,7 @@ Route::get('test', function (AttachMediaToAnyModel $action) {
     // $action->handle($payment, $file, media_collection: MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS);
 
 
-    // return Inertia::render('test');
+    return Inertia::render('test');
 });
 
 Route::get('test2', function () {
@@ -106,7 +111,6 @@ Route::get('test2', function () {
 
 
 Route::get('dashboard', function () {
-
 
     function findAndReplacePattern($words, $pattern)
     {

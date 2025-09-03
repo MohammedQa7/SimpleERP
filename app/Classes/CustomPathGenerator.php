@@ -23,7 +23,6 @@ class CustomPathGenerator implements PathGenerator
             case MediaCollection::INVOICES->value:
                 $model->load('order.customer');
 
-
                 $username = $model->order->customer->full_name;
                 $customer_code = $model->order->customer->customer_code;
 
@@ -43,8 +42,9 @@ class CustomPathGenerator implements PathGenerator
 
                 $username = $model->modelable->order->customer->full_name;
                 $customer_code = $model->modelable->order->customer->customer_code;
-
+                
                 return FilePathHelper::buildCustomerUploadPath(FileAndFolderGlobalPaths::CUSTOMERS_PROOF_OF_PAYMENT_PATH, [], $customer_code);
+                
 
             case MediaCollection::RECEIPT_PAYMENT->value:
 
@@ -63,7 +63,6 @@ class CustomPathGenerator implements PathGenerator
                 return FilePathHelper::buildCustomerUploadPath(FileAndFolderGlobalPaths::CUSTOMERS_RECEIPT_PATH, [], $customer_code);
 
             default:
-                dd('e13123213ts');
                 return "uploads/";
         }
     }

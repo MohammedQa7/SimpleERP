@@ -21,6 +21,7 @@ export default {
     ],
     theme: {
         extend: {
+
             fontFamily: {
                 sans: ['Instrument Sans', ...defaultTheme.fontFamily.sans],
             },
@@ -81,7 +82,29 @@ export default {
                     ring: 'hsl(var(--sidebar-ring))',
                 },
             },
+
+            typography: {
+                DEFAULT: {
+                    css: {
+                        color: 'inherit',          // inherit from parent
+                        a: { color: 'inherit' },
+                        strong: { color: 'inherit' },
+                        code: { color: 'inherit' },
+                        blockquote: { color: 'inherit' },
+                        h1: { color: 'inherit' },
+                        h2: { color: 'inherit' },
+                        h3: { color: 'inherit' },
+                        h4: { color: 'inherit' },
+                        h5: { color: 'inherit' },
+                        h6: { color: 'inherit' },
+                    },
+                },
+            },
         },
     },
-    plugins: [require('tailwindcss-animate')],
+
+    plugins: [
+        require('tailwindcss-animate'),
+        require('@tailwindcss/typography'),
+    ],
 };

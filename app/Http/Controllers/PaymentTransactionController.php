@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Actions\AttachMediaToAnyModel;
 use App\Actions\CreateRequiredFolders;
+use App\Classes\CsvGenerator;
+use App\Classes\PdfGenerator;
+use App\DTO\PdfDTO;
 use App\Enums\InvoiceStatus;
 use App\Enums\MediaCollection;
 use App\Http\Resources\PaymentTransactionResource;
 use App\Models\Invoice;
 use App\Models\PaymentTransaction;
 use App\Services\InvoiceService;
+use App\Services\ReportService;
 use App\Traits\hasAttachments;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
@@ -43,7 +47,7 @@ class PaymentTransactionController extends Controller
         ]);
     }
 
-    function store(Request $request, AttachMediaToAnyModel $attach_media_to_model, CreateRequiredFolders $create_required_folders)
+    function store(Request $request, AttachMediaToAnyModel $attach_media_to_model, CreateRequiredFolders $create_required_folders, ReportService $report_service)
     {
         try {
             DB::beginTransaction();
@@ -55,12 +59,13 @@ class PaymentTransactionController extends Controller
                 'notes' => null,
             ]);
 
-            // Get files from temp directory and store them , then attach it to the model (Normal files like)
+            // Get files from temp directory and store them , then attach it to the model (Normal files like: images....)
             $attach_media_to_model->handle($payment_transaction, $request->attachments, MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS, false);
 
-            // Generating a receipt
-            $pdf = \PDF::loadView('Receipts.receipt', ['invoice' => $invoice, 'payment_transaction' => $payment_transaction]);
-            $attach_media_to_model->handle($payment_transaction, $pdf->output(), MediaCollection::RECEIPT_PAYMENT, false, $payment_transaction->payment_number);
+            // Generating a PDF receipt 
+            $pdf_data = new PdfDTO('Receipts.receipt', ['invoice' => $invoice, 'payment_transaction' => $payment_transaction]);
+            $pdf_raw_content = $report_service->generateReport(new PdfGenerator(), $pdf_data);
+            $attach_media_to_model->handle($payment_transaction, $pdf_raw_content, MediaCollection::RECEIPT_PAYMENT, false, $payment_transaction->payment_number);
 
             // store the same files in the file manager in order to keep track of all files and manage all files + create strict folders for this type of file.
             // $create_required_folders->handle();
@@ -81,7 +86,6 @@ class PaymentTransactionController extends Controller
 
     function show(PaymentTransaction $transaction)
     {
-
         $transaction->load([
             'modelable' =>
             function ($morphTo) {

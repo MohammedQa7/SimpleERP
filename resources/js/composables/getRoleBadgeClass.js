@@ -9,5 +9,4 @@ export function getRoleBadgeClass(role) {
     };
 
     return roleClasses[role] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'; // Default fallback
-
 }

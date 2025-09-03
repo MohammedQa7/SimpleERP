@@ -9,25 +9,22 @@
             <FileText class="h-6 w-6 text-primary" />
             <span class="font-bold text-xl">DriveDMS</span>
           </div>
-          
+
           <!-- Google Drive-like search bar -->
           <div class="flex-1 max-w-2xl mx-4 hidden sm:block">
             <div class="relative">
               <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                type="search" 
-                placeholder="Search in Drive" 
-                class="pl-10 pr-4 py-2 h-10 w-full bg-accent/50 hover:bg-accent focus-within:bg-background focus-within:shadow-md transition-all border-0 focus-visible:ring-0" 
-              />
+              <Input type="search" placeholder="Search in Drive"
+                class="pl-10 pr-4 py-2 h-10 w-full bg-accent/50 hover:bg-accent focus-within:bg-background focus-within:shadow-md transition-all border-0 focus-visible:ring-0" />
             </div>
           </div>
-          
+
           <div class="flex items-center gap-2 ml-auto">
             <!-- Mobile search button -->
             <Button variant="ghost" size="icon" class="rounded-full sm:hidden">
               <Search class="h-5 w-5" />
             </Button>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon" class="rounded-full hidden sm:flex">
@@ -36,7 +33,7 @@
               </TooltipTrigger>
               <TooltipContent>Help</TooltipContent>
             </Tooltip>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="ghost" size="icon" class="rounded-full">
@@ -45,7 +42,7 @@
               </TooltipTrigger>
               <TooltipContent>Settings</TooltipContent>
             </Tooltip>
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar class="cursor-pointer h-9 w-9">
@@ -84,20 +81,19 @@
         </div>
       </header>
 
+
+
       <!-- Main Content -->
       <main class="container py-6 px-4 sm:px-6">
         <!-- Mobile search - only visible on small screens -->
         <div class="mb-6 sm:hidden">
           <div class="relative">
             <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              type="search" 
-              placeholder="Search in Drive" 
-              class="pl-10 pr-4 py-2 h-10 w-full bg-accent/50 hover:bg-accent focus-within:bg-background focus-within:shadow-md transition-all border-0 focus-visible:ring-0" 
-            />
+            <Input type="search" placeholder="Search in Drive"
+              class="pl-10 pr-4 py-2 h-10 w-full bg-accent/50 hover:bg-accent focus-within:bg-background focus-within:shadow-md transition-all border-0 focus-visible:ring-0" />
           </div>
         </div>
-        
+
         <div class="flex flex-col gap-6">
           <!-- Action buttons (Google Drive-style) -->
           <div class="flex items-center gap-2 flex-wrap">
@@ -133,7 +129,7 @@
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" class="rounded-full ml-2">
@@ -142,7 +138,7 @@
               </TooltipTrigger>
               <TooltipContent>Upload files</TooltipContent>
             </Tooltip>
-            
+
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button variant="outline" size="icon" class="rounded-full">
@@ -151,14 +147,14 @@
               </TooltipTrigger>
               <TooltipContent>New folder</TooltipContent>
             </Tooltip>
-            
+
             <!-- Simplified Storage Display -->
             <div class="ml-auto flex items-center gap-2 bg-card rounded-full border px-4 py-1.5 shadow-sm">
               <HardDrive class="h-4 w-4 text-primary" />
               <span class="text-sm font-medium">2.4 GB used</span>
             </div>
           </div>
-          
+
           <!-- Quick Access Section (Google Drive-style) -->
           <div>
             <h2 class="text-lg font-medium mb-4">Quick access</h2>
@@ -174,7 +170,7 @@
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card class="overflow-hidden border hover:shadow-md transition-shadow">
                 <CardContent class="p-0">
                   <div class="aspect-video bg-muted flex items-center justify-center">
@@ -186,7 +182,7 @@
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card class="overflow-hidden border hover:shadow-md transition-shadow">
                 <CardContent class="p-0">
                   <div class="aspect-video bg-muted flex items-center justify-center">
@@ -198,7 +194,7 @@
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card class="overflow-hidden border hover:shadow-md transition-shadow">
                 <CardContent class="p-0">
                   <div class="aspect-video bg-muted flex items-center justify-center">
@@ -212,7 +208,7 @@
               </Card>
             </div>
           </div>
-          
+
           <!-- Folder Navigation (Google Drive-style collapsible) -->
           <div>
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
@@ -234,7 +230,7 @@
                     </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
-                
+
                 <div class="flex border rounded-md">
                   <Button variant="ghost" size="icon" class="h-8 w-8 rounded-r-none border-r bg-accent">
                     <LayoutGrid class="h-4 w-4" />
@@ -245,10 +241,11 @@
                 </div>
               </div>
             </div>
-            
+
             <!-- Folder Tree (Collapsible) -->
             <Collapsible class="w-full border rounded-lg mb-4 shadow-sm">
-              <CollapsibleTrigger class="flex w-full items-center justify-between p-3 hover:bg-accent hover:text-accent-foreground rounded-t-lg">
+              <CollapsibleTrigger
+                class="flex w-full items-center justify-between p-3 hover:bg-accent hover:text-accent-foreground rounded-t-lg">
                 <div class="flex items-center gap-2">
                   <FolderTree class="h-5 w-5" />
                   <span class="font-medium">Folder structure</span>
@@ -264,16 +261,18 @@
                   <ScrollArea className="h-[250px] pr-4">
                     <div class="grid gap-1 pt-2">
                       <Collapsible>
-                        <CollapsibleTrigger class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
+                        <CollapsibleTrigger
+                          class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
                           <ChevronRight class="h-4 w-4 text-muted-foreground transition-transform" />
                           <Folder class="h-4 w-4 text-muted-foreground" />
                           <span>Projects</span>
                           <Badge variant="outline" class="ml-auto">12</Badge>
                         </CollapsibleTrigger>
                       </Collapsible>
-                      
+
                       <Collapsible defaultOpen>
-                        <CollapsibleTrigger class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
+                        <CollapsibleTrigger
+                          class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
                           <ChevronRight class="h-4 w-4 text-muted-foreground transition-transform rotate-90" />
                           <Folder class="h-4 w-4 text-muted-foreground" />
                           <span>Documents</span>
@@ -299,18 +298,20 @@
                           </div>
                         </CollapsibleContent>
                       </Collapsible>
-                      
+
                       <Collapsible>
-                        <CollapsibleTrigger class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
+                        <CollapsibleTrigger
+                          class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
                           <ChevronRight class="h-4 w-4 text-muted-foreground transition-transform" />
                           <Folder class="h-4 w-4 text-muted-foreground" />
                           <span>Templates</span>
                           <Badge variant="outline" class="ml-auto">7</Badge>
                         </CollapsibleTrigger>
                       </Collapsible>
-                      
+
                       <Collapsible>
-                        <CollapsibleTrigger class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
+                        <CollapsibleTrigger
+                          class="flex w-full items-center gap-1 rounded-md px-2 py-1.5 text-sm hover:bg-accent hover:text-accent-foreground">
                           <ChevronRight class="h-4 w-4 text-muted-foreground transition-transform" />
                           <Folder class="h-4 w-4 text-muted-foreground" />
                           <span>Archive</span>
@@ -322,7 +323,7 @@
                 </div>
               </CollapsibleContent>
             </Collapsible>
-            
+
             <!-- File Type Filter (Google Drive-style) -->
             <div class="flex flex-wrap gap-2 mb-4">
               <Button variant="outline" class="rounded-full text-sm h-8 px-3 bg-background">
@@ -387,7 +388,7 @@
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <!-- PDF File Item -->
               <div class="group relative bg-card rounded-lg border shadow-sm hover:shadow-md transition-all">
                 <div class="p-4">
@@ -431,7 +432,7 @@
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <!-- Excel File Item -->
               <div class="group relative bg-card rounded-lg border shadow-sm hover:shadow-md transition-all">
                 <div class="p-4">
@@ -475,7 +476,7 @@
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <!-- Image File Item -->
               <div class="group relative bg-card rounded-lg border shadow-sm hover:shadow-md transition-all">
                 <div class="p-4">
@@ -519,7 +520,7 @@
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <!-- Word File Item -->
               <div class="group relative bg-card rounded-lg border shadow-sm hover:shadow-md transition-all">
                 <div class="p-4">
@@ -563,7 +564,7 @@
                   </DropdownMenu>
                 </div>
               </div>
-              
+
               <!-- Another Folder Item -->
               <div class="group relative bg-card rounded-lg border shadow-sm hover:shadow-md transition-all">
                 <div class="p-4">
@@ -613,38 +614,38 @@
 
 <script setup>
 import { ref } from 'vue'
-import { 
-  Bell, 
-  ChevronDown, 
-  ChevronRight, 
-  Clock, 
-  Download, 
+import {
+  Bell,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Download,
   Eye,
-  File, 
+  File,
   FileImage,
   FileSpreadsheet,
-  FileText, 
-  Filter, 
-  Folder, 
+  FileText,
+  Filter,
+  Folder,
   FolderPlus,
   FolderTree,
   FolderUp,
   HardDrive,
   HelpCircle,
-  Home, 
-  LayoutGrid, 
-  List, 
-  ListFilter, 
+  Home,
+  LayoutGrid,
+  List,
+  ListFilter,
   LogOut,
   Menu,
-  MoreHorizontal, 
-  MoreVertical, 
+  MoreHorizontal,
+  MoreVertical,
   PenLine,
-  Plus, 
-  Search, 
-  Settings, 
+  Plus,
+  Search,
+  Settings,
   Share,
-  Star, 
+  Star,
   Trash,
   Upload,
   User
@@ -653,7 +654,7 @@ import {
 // Import shadcn-vue components
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { 
+import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
@@ -664,17 +665,17 @@ import {
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem
 } from '@/components/ui/dropdown-menu'
-import { 
+import {
   Avatar,
   AvatarImage,
   AvatarFallback
 } from '@/components/ui/avatar'
-import { 
+import {
   Card,
   CardContent,
   CardFooter
 } from '@/components/ui/card'
-import { 
+import {
   Collapsible,
   CollapsibleTrigger,
   CollapsibleContent
@@ -742,7 +743,7 @@ body {
 }
 
 /* Fix for Collapsible rotation */
-.collapsible[data-state="open"] > .collapsible-trigger svg:last-child {
+.collapsible[data-state="open"]>.collapsible-trigger svg:last-child {
   transform: rotate(180deg);
 }
 </style>

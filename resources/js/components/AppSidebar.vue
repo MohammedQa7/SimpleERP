@@ -30,23 +30,23 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'Finance Management',
-        isActive: page.url == new URL(route('invoices.index')).pathname || page.url == new URL(route('finance.statistics')).pathname,
+        isActive: route().current('finance.*'),
         icon: Coins,
         subItems: [
             {
                 title: 'Statistics',
-                href: new URL(route('finance.statistics')).pathname,
+                href: route('finance.statistics'),
                 icon: ChartArea,
             },
 
             {
                 title: 'Invoices',
-                href: new URL(route('invoices.index')).pathname,
+                href: route('invoices.index'),
                 icon: Paperclip,
             },
             {
                 title: 'Payment Transactions',
-                href: new URL(route('payments.index')).pathname,
+                href: route('payments.index'),
                 icon: CoinsIcon,
             },
         ],
@@ -60,28 +60,28 @@ const mainNavItems: NavItem[] = [
 
     {
         title: 'HR Management',
-        isActive: page.url == new URL(route('employees.index')).pathname,
+        isActive: route().current('hr.*'),
         icon: Users,
         subItems: [
             {
                 title: 'Statistics',
-                href: new URL(route('hr.statistics')).pathname,
+                href: route('hr.statistics'),
                 icon: AlignStartVertical,
             },
             {
                 title: 'Employees',
-                href: new URL(route('employees.index')).pathname,
+                href: route('employees.index'),
                 icon: UserCircle2,
             },
 
             {
                 title: 'Attendances',
-                href: new URL(route('invoices.index')).pathname,
+                href: route('attendances.index'),
                 icon: Clock,
             },
             {
                 title: 'Payroll',
-                href: new URL(route('payments.index')).pathname,
+                href: route('payments.index'),
                 icon: DollarSign,
             },
         ],

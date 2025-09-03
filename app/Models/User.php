@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use Illuminate\Support\Carbon;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -55,12 +56,12 @@ class User extends Authenticatable
     }
 
 
-    function events()
+    public function events()
     {
         return $this->hasMany(Event::class);
     }
 
-    function invitedEvents()
+    public function invitedEvents()
     {
         return $this->belongsToMany(Event::class, 'event_user');
     }
@@ -70,11 +71,24 @@ class User extends Authenticatable
         return $this->morphToMany(PaymentTransaction::class, 'model');
     }
 
+    public function attendanceLogs()
+    {
+        return $this->hasMany(AttendanceLog::class, 'employee_id');
+    }
     // SCOPES
     function scopeEmployeesOnly($query)
     {
         return $query->whereDoesntHave('roles', function ($query) {
             $query->where('name', UserRoles::ADMINISTRATOR->value);
         });
+    }
+
+    function scopeLastAttendanceAction()
+    {
+        $attendance_log = $this->attendanceLogs()->whereDate('created_at', Carbon::today())->latest()->first();
+        if (!is_null($attendance_log) && $attendance_log->action == 'check-in') {
+            return 'check-out';
+        }
+        return 'check-in';
     }
 }

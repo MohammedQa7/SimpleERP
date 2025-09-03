@@ -19,7 +19,6 @@ class Order extends Model
         return 'order_number';
     }
 
-
     function hasGeneratedInvoice()
     {
         if (!$this->relationLoaded('invoice')) {

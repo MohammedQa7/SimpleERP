@@ -37,7 +37,7 @@ class Invoice extends Model implements HasMedia
             ->nonQueued();
     }
 
-    function order()
+    public function order()
     {
         return $this->belongsTo(Order::class);
     }

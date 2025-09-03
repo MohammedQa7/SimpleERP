@@ -2,6 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\AnnouncementsResource;
+use App\Http\Resources\AttendanceLogResource;
+use App\Models\Announcement;
+use App\Models\AttendanceLog;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -46,11 +50,17 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            // Below code need to be modifide for preformance issues in the future.
+            'announcements' => AnnouncementsResource::collection(Announcement::latest()->limit(3)->get()),
+            'lastAnnouncement' => Announcement::latest()->first()->uuid ?? null,
+            'isEmployeeCheckedIn' => auth()->check() ? AttendanceLog::isEmployeeCheckedIn() : null,
+            // --------
             'ziggy' => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
             'csrf' => csrf_token(),
         ];
+
     }
 }
