@@ -22,7 +22,6 @@ class WarehouseRequests extends Model
     }
 
 
-
     // Relationships
     function user()
     {

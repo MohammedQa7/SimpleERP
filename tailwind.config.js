@@ -24,6 +24,8 @@ export default {
 
             fontFamily: {
                 sans: ['Instrument Sans', ...defaultTheme.fontFamily.sans],
+                NeueReg: "NeueReg",
+                NeueBold: "NeueBold",
             },
             borderRadius: {
                 lg: 'var(--radius)',
@@ -33,6 +35,12 @@ export default {
             colors: {
                 background: 'hsl(var(--background))',
                 foreground: 'hsl(var(--foreground))',
+                'website-primary': 'hsl(var(--website-primary) / <alpha-value>)',
+                'website-secondary': 'hsl(var(--website-secondary) / <alpha-value>)',
+                'website-secondary-foreground': 'hsl(var(--website-secondary-foreground) / <alpha-value>)',
+                'website-background': 'hsl(var(--website-background) / <alpha-value>)',
+
+
                 card: {
                     DEFAULT: 'hsl(var(--card))',
                     foreground: 'hsl(var(--card-foreground))',

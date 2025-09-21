@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { AlignStartHorizontal, AlignStartVertical, BookOpen, ChartArea, Clock, Coins, CoinsIcon, DiamondPercent, DollarSign, Folder, LayoutGrid, Package, Paperclip, Percent, Receipt, SquarePercent, SquareUser, UserCircle2, Users } from 'lucide-vue-next';
+import { AlignStartHorizontal, AlignStartVertical, BookOpen, CalendarCog, CalendarOff, ChartArea, Clock, Coins, CoinsIcon, DiamondPercent, DollarSign, Folder, LayoutGrid, Package, Paperclip, Percent, Receipt, SquarePercent, SquareUser, UserCircle2, Users } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 const page = usePage<SharedData>();
 const mainNavItems: NavItem[] = [
@@ -84,6 +84,11 @@ const mainNavItems: NavItem[] = [
                 href: route('payments.index'),
                 icon: DollarSign,
             },
+            {
+                title: 'Time Off Requests',
+                href: route('department.leave.requests.index'),
+                icon: CalendarOff,
+            },
         ],
     },
 
@@ -96,14 +101,9 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'Request Time Off',
+        href: route('employee.requests.index'),
+        icon: CalendarCog,
     },
 ];
 </script>

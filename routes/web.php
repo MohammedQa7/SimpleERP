@@ -6,10 +6,13 @@ use App\Http\Controllers\AdjustProductStockController;
 use App\Http\Controllers\ApproveStockRequestController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendanceLogController;
+use App\Http\Controllers\DepartmentRequestController;
 use App\Http\Controllers\DownloadAttachmentController;
 use App\Http\Controllers\DownloadInvoicesController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\EmployeeRequestController;
 use App\Http\Controllers\EventsController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FinanceStatisticsController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\HrStatisticsController;
@@ -54,6 +57,8 @@ Route::middleware('auth')->group(function () {
         // Products
         Route::resource('products', ProductController::class)->names('products');
         Route::get('product/history/{product}', ProductHistoryController::class)->name('product.history');
+
+        // Products requests for restock
         Route::get('warehouse/notificaions', [WarehouseRequestController::class, 'notificaions'])->name('warehouse.notificaions');
 
         // Actions
@@ -69,13 +74,25 @@ Route::middleware('auth')->group(function () {
         Route::resource('attendances/logs', AttendanceLogController::class)->except(['destroy', 'create', 'edit', 'update'])->names('attendances.logs');
         Route::resource('attendances', AttendanceController::class)->names('attendances');
 
+        Route::resource('department/leave-requests', DepartmentRequestController::class)->names('department.leave.requests');
+        Route::put('leave-requests/{department_leave_request}/apporve', [DepartmentRequestController::class, 'approve'])->name('leave.request.approve');
+        Route::put('leave-requests/{department_leave_request}/reject', [DepartmentRequestController::class, 'reject'])->name('leave.request.reject');
+
         // Events
         Route::resource('events', EventsController::class)->except('index')->names('events');
         Route::get('calendar/events', [EventsController::class, 'index'])->name('events.calendar');
 
         // Statistics
         Route::get('statistics', HrStatisticsController::class)->name('hr.statistics');
+
     });
+
+    // Global Access to all permissions;
+
+    Route::resource('employee/leave-requests', EmployeeRequestController::class)->except('destroy', 'edit', 'show', 'update')->names('employee.requests');
+
+    // Exporting different type of files for all departments 
+    Route::get('export/{module}/{type}', ExportController::class)->name('export');
 
     // Folders / Files Mangers
     Route::resource('folders', FolderController::class)->names('folders');
@@ -85,19 +102,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/attachments/revert', [UploadTemporatyAttachmentsController::class, 'revertAttachments'])->name('revert');
     // Download Invoices.
     Route::get('/attachment/download/{media}', DownloadInvoicesController::class)->name('download');
-
+    // ------
 });
 
 
 
-Route::get('test', function (AttachMediaToAnyModel $action) {
-    // $payment = PaymentTransaction::find(2);
-    // $path = 'attachments/522jJTF2C6N8y63O92MWF1GA45x56AGiGZvsE5xK.png';
-    // $file = public_path('storage/' . $path);
-
-    // $action->handle($payment, $file, media_collection: MediaCollection::PAYMENT_TRANSACTIONS_ATTACHMENTS);
-
-
+Route::get('test', function () {
     return Inertia::render('test');
 });
 
@@ -111,49 +121,9 @@ Route::get('test2', function () {
 
 
 Route::get('dashboard', function () {
-
-    function findAndReplacePattern($words, $pattern)
-    {
-        $matched_words = [];
-        foreach ($words as $word) {
-            if (doesWordMatchPattern($word, $pattern)) {
-                $matched_words[] = $word;
-            }
-        }
-
-        return $matched_words;
-    }
-    function doesWordMatchPattern($word, $pattern)
-    {
-
-        $pattern_to_word = [];
-        $word_to_pattern = [];
-
-        for ($i = 0; $i < strlen($pattern); $i++) {
-            $p_char = $pattern[$i];
-            $w_char = $word[$i];
-
-            // if
-            if (isset($pattern_to_word[$p_char]) && $pattern_to_word[$p_char] != $w_char || isset($word_to_pattern[$w_char]) && $word_to_pattern[$w_char] != $p_char) {
-                dump($pattern_to_word, $word_to_pattern);
-                return false;
-            }
-
-
-            $pattern_to_word[$p_char] = $w_char;
-            $word_to_pattern[$w_char] = $p_char;
-
-        }
-
-        // dump($pattern_to_word, $word_to_pattern);
-        return true;
-
-    }
-
-
-
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+require __DIR__ . '/website.php';

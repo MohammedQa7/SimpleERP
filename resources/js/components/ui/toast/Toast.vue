@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { ToastRoot, type ToastRootEmits, useForwardPropsEmits } from 'reka-ui'
 import { computed } from 'vue'
 import { type ToastProps, toastVariants } from '.'
+import { Loader2 } from 'lucide-vue-next';
 
 const props = defineProps<ToastProps>()
 
@@ -15,14 +16,12 @@ const delegatedProps = computed(() => {
 })
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
 </script>
 
 <template>
-  <ToastRoot
-    v-bind="forwarded"
-    :class="cn(toastVariants({ variant }), props.class)"
-    @update:open="onOpenChange"
-  >
-    <slot />
+
+  <ToastRoot v-bind="forwarded" :class="cn(toastVariants({ variant }), props.class)" @update:open="onOpenChange">
+      <slot />
   </ToastRoot>
 </template>

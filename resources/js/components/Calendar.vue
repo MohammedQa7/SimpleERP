@@ -41,9 +41,12 @@ const emit = defineEmits();
 watch(date, () => {
     if (date) {
         const formatedDate = date.value.day + '/' + date.value.month + '/' + date.value.year;
-        emit('bindCalendarDate', date);
+        emit('bindCalendarDate', date.value.toString());
     }
 })
+
+
+
 
 
 

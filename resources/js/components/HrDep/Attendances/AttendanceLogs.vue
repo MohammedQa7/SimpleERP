@@ -59,8 +59,11 @@ import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import { Dot, LogIn, LogOut } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+const isLoading = ref(true);
 const propsData = defineProps({
     attendanceLogs: Array,
 });
+
+
 
 </script>

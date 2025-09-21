@@ -10,14 +10,16 @@ use Inertia\Inertia;
 
 class AttendanceLogController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         $attendance_logs = AttendanceLog::with('employee')
-            ->whereDate('created_at', Carbon::today())
-            ->paginate(10);
+            ->Filter([...$request->query])
+            ->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('HrDepartment/Attendances/Logs', [
             'attendanceLogs' => AttendanceLogResource::collection($attendance_logs),
+            'filters' => [...$request->query],
         ]);
     }
 

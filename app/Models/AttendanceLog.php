@@ -34,12 +34,25 @@ class AttendanceLog extends Model
             ->latest()
             ->first();
 
-            
+
         if ($data) {
             return [
                 'value' => $data->action == 'check-in',
                 'data' => $data->action == 'check-in' ? new AttendanceLogResource($data) : null,
             ];
         }
+    }
+
+    function scopeFilter($query, $request)
+    {
+        return $query->when(isset($request['search']), function ($query) use ($request) {
+            $query->whereHas('employee', function ($query) use ($request) {
+                $query->where('name', 'LIKE', "%{$request['search']}%");
+            });
+        })
+            ->when(isset($request['startDate']) && isset($request['endDate']), function ($query) use ($request) {
+                $query->whereBetween('created_at', [Carbon::parse($request['startDate'])->startOfDay(), Carbon::parse($request['endDate'])->endOfDay()]);
+            });
+
     }
 }

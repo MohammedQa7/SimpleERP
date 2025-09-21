@@ -9,6 +9,7 @@ enum Departments: string
     case WAREHOUSE = 'Warehouse Department';
     case CRM = 'CRM Department';
     case HR = 'HR Department';
+    case IT = 'IT Department';
 
     static function toArray()
     {

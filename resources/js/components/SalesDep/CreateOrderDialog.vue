@@ -35,6 +35,7 @@
                                     <Label for="date">Order Date</Label>
                                     <!-- Calendar Customm Component -->
                                     <Calendar @bindCalendarDate="onBindCalendarDate" />
+                                    <RangeDatePicker @bindDate="onBindCalendarDate" />
                                     <InputError :message="form.errors.orderDate" />
                                 </div>
                             </div>
@@ -314,9 +315,10 @@ import AlertDialogAction from '../ui/alert-dialog/AlertDialogAction.vue'
 import InputError from '../InputError.vue'
 import { toast } from '@/components/ui/toast'
 import CustomerSelect from '../CustomerSelect.vue'
-import Calendar from '../Calendar.vue'
 import DialogClose from '../ui/dialog/DialogClose.vue'
 import Label from '../ui/label/Label.vue'
+import Calendar from '../Calendar.vue'
+import RangeDatePicker from '../RangeDatePicker.vue'
 const isLoading = ref(false);
 const customers = ref([]);
 const products = ref([]);

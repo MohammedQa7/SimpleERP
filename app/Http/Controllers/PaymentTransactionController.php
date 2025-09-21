@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Actions\AttachMediaToAnyModel;
 use App\Actions\CreateRequiredFolders;
-use App\Classes\CsvGenerator;
-use App\Classes\PdfGenerator;
 use App\DTO\PdfDTO;
 use App\Enums\InvoiceStatus;
 use App\Enums\MediaCollection;
 use App\Http\Resources\PaymentTransactionResource;
 use App\Models\Invoice;
 use App\Models\PaymentTransaction;
+use App\Reports\Classes\PdfGenerator;
+use App\Reports\Services\GenerateReportService;
 use App\Services\InvoiceService;
-use App\Services\ReportService;
 use App\Traits\hasAttachments;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
@@ -47,7 +46,7 @@ class PaymentTransactionController extends Controller
         ]);
     }
 
-    function store(Request $request, AttachMediaToAnyModel $attach_media_to_model, CreateRequiredFolders $create_required_folders, ReportService $report_service)
+    function store(Request $request, AttachMediaToAnyModel $attach_media_to_model, CreateRequiredFolders $create_required_folders, GenerateReportService $generate_report)
     {
         try {
             DB::beginTransaction();
@@ -64,7 +63,7 @@ class PaymentTransactionController extends Controller
 
             // Generating a PDF receipt 
             $pdf_data = new PdfDTO('Receipts.receipt', ['invoice' => $invoice, 'payment_transaction' => $payment_transaction]);
-            $pdf_raw_content = $report_service->generateReport(new PdfGenerator(), $pdf_data);
+            $pdf_raw_content = $generate_report->generate(new PdfGenerator(), $pdf_data);
             $attach_media_to_model->handle($payment_transaction, $pdf_raw_content, MediaCollection::RECEIPT_PAYMENT, false, $payment_transaction->payment_number);
 
             // store the same files in the file manager in order to keep track of all files and manage all files + create strict folders for this type of file.

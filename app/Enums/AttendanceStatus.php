@@ -8,7 +8,7 @@ enum AttendanceStatus: string
     case ABSENT = 'Absent';
     case LATE = 'Late';
     case URGENT_SITUATION = 'Urgent Situation';
-    case SICK_LEAVE = 'Sick Leave';
+    case OFF_DAY = 'Off Day';
     case ON_LEAVE = 'On Leave';
     case ON_VACATION = 'On Vacation';
 

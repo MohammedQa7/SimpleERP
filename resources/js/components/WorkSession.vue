@@ -8,7 +8,7 @@
             <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"
                 :class="isEmployeeCheckedIn ? 'bg-green-400' : 'bg-red-400'" />
 
-            <p class=" transition-all duration-150 ease-in-out"
+            <p class=" transition-all duration-150 ease-in-out  dark:text-white"
                 :class="revealText ? 'w-32 opacity-100' : 'w-0 opacity-0'">
                 Session Details</p>
             <ChevronRight :size="16" />
@@ -20,7 +20,7 @@
         leave-to-class="translate-x-full opacity-0">
         <Card v-if="!isWidgetCollapsed"
             class="fixed max-w-80 top-[15%] -translate-y-1/2 right-4 p-4 shadow-lg border backdrop-blur-sm"
-            :class="!isEmployeeCheckedIn ? 'bg-red-100/20 border-red-300' : ''">
+            :class="!isEmployeeCheckedIn ? 'bg-red-100/30 dark:bg-red-100/5 border-red-300' : ''">
             <div v-if="isEmployeeCheckedIn" class=" flex items-start justify-between gap-3 min-w-[280px] ">
                 <div class="flex-1 space-y-2">
                     <div class="flex justify-between items-center gap-2 text-sm">
@@ -68,7 +68,7 @@
             <!-- If the employee is not checked in -->
             <div v-else class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <AlertTriangle class=" text-destructive" />
+                    <AlertTriangle class="text-destructive" />
                     <h1 class="text-sm text-destructive">
                         Not checked in - Please check in to start your session
                     </h1>
@@ -78,7 +78,7 @@
                     </Button>
                 </div>
                 <Button @click.prevent="attendWorkSession" size="sm"
-                    class="w-full text-xs bg-green-700 hover:bg-green-900" :disabled="isLoading">
+                    class="w-full text-white text-xs bg-green-700 hover:bg-green-900" :disabled="isLoading">
                     <Loader2 v-if="isLoading" class=" animate-spin" />
                     <LogIn v-else class="h-3 w-3 mr-2" />
                     Check In
@@ -106,7 +106,7 @@ const employeeCheckedData = ref();
 import { useToast } from '@/components/ui/toast/use-toast'
 import DeleteDialog from './DeleteDialog.vue';
 import AlertDialogAction from './ui/alert-dialog/AlertDialogAction.vue';
-const { toast } = useToast()
+const { toast } = useToast();
 
 const attendWorkSession = () => {
     isLoading.value = true;

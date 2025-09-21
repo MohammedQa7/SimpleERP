@@ -61,10 +61,7 @@ class OrderController extends Controller
     function store(OrderRequest $request, CreateOrderItems $orderAction, CalculateTotalPriceForProducts $priceAction, IsProductOutOfStock $checkStockAction)
     {
         $data = fluent($request->validated());
-
         $stock_action = $checkStockAction->handle($data->orderItems);
-
-
 
         try {
             DB::beginTransaction();
@@ -87,7 +84,6 @@ class OrderController extends Controller
 
             // Notify Warehouse Department of out of stock items
             if ($stock_action->getIsAnyProductOutOfStock()) {
-
                 event(new ProductOutOfStock($order, $stock_action->getStockItems(), Departments::SALES->value, $request->priority , $request->notes));
             }
 
@@ -122,6 +118,7 @@ class OrderController extends Controller
     function update(OrderRequest $request, Order $order, OrderItemService $orderItemService, CalculateTotalPriceForProducts $priceAction, IsProductOutOfStock $checkStockAction)
     {
         $this->authorize('update', [Order::class, $order]);
+
         $order->load('orderItems');
         $data = fluent($request->validated());
         $is_any_product_out_of_stock = $checkStockAction->handle($data->orderItems)->getIsAnyProductOutOfStock();

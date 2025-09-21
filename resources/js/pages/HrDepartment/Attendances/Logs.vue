@@ -16,19 +16,19 @@
                         <h3 class="text-lg font-medium">{{ getCurrentDate() }} Attendance</h3>
                         <div class="flex items-center justify-between space-x-2">
                             <div class="flex items-center space-x-2">
-                                <Input placeholder="Search employee..." class="w-64" />
+                                <Input v-model="filtersQuery.search" placeholder="Search employee..." class="w-64" />
                             </div>
                             <div class="flex items-center space-x-2">
-                                <Button variant="outline" size="sm">
-                                    <Calendar class="mr-2 h-4 w-4" />
-                                    Date Range
-                                </Button>
 
-                                <ExportOptions />
+                                <!-- Attendance Date picker -->
+                                <RangeDatePicker :startDate="filters.startDate" :endDate="filters.endDate"
+                                    @bindDate="bindCalendarDate" />
+
+                                <!-- Export Selection options -->
+                                <ExportOptions :is-disabled="attendanceLogs.data.length > 0" />
                             </div>
                         </div>
                     </div>
-
                     <!-- Attendance Logs Section -->
                     <AttendanceLogs :attendance-logs="attendanceLogs" />
                 </div>
@@ -40,18 +40,50 @@
 
 
 <script setup>
-import { Calendar } from 'lucide-vue-next'
 import AppLayout from '@/layouts/AppLayout.vue'
-import Button from '@/components/ui/button/Button.vue'
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import AttendanceLogs from '@/components/HrDep/Attendances/AttendanceLogs.vue'
 import Input from '@/components/ui/input/Input.vue'
 import { getCurrentDate } from '@/lib/todaysDate'
 import ExportOptions from '@/components/ExportOptions.vue'
+import RangeDatePicker from '@/components/RangeDatePicker.vue'
+import { debounce } from 'lodash';
+import { onMounted, ref, watch } from 'vue'
+import { router, usePage } from '@inertiajs/vue3';
+import { provideSSRWidth } from '@vueuse/core'
+const page = usePage();
 const propsData = defineProps({
     attendanceLogs: Array,
+    filters: Array,
+});
+const filtersQuery = ref({
+    search: '',
+    startDate: null,
+    endDate: null
 });
 
+const bindCalendarDate = (date) => {
+    filtersQuery.value = { ...date };
+};
+
+const submitFilter = debounce(() => {
+    router.get(route('attendances.logs.index', filtersQuery.value), {}, {
+        preserveScroll: true,
+        preserveState: true
+    });
+}, 500)
+
+
+watch(filtersQuery, () => {
+    submitFilter();
+}, { deep: true })
+
+onMounted(() => {
+
+    if (propsData.filters) {
+        filtersQuery.value = { ...propsData.filters };
+    }
+});
 
 defineOptions({
     layout: AppLayout
