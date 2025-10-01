@@ -96,7 +96,8 @@
                             <div v-for="request in employeeRequests.data" :key="request.id"
                                 class="flex items-center justify-between p-3 rounded-lg border bg-card/50">
                                 <div class="space-y-1">
-                                    <p class="font-medium text-sm text-balance">{{ request.employeeRequest.type }}
+                                    <p class="font-medium text-sm ">{{ request.title }}</p>
+                                    <p class="font-medium text-xs text-balance">{{ request.employeeRequest.type }}
                                         Request</p>
                                     <p class="text-xs text-muted-foreground">
                                         From: {{ request.employeeRequest.startDate }}

@@ -86,7 +86,6 @@
             </div>
         </Card>
     </Transition>
-
 </template>
 <script setup>
 import { onMounted, ref, Transition } from 'vue';

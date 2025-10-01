@@ -1,5 +1,6 @@
 <template>
     <!-- Hero Section -->
+
     <div
         class=" pt-12 pb-8 sm:pb-12 md:pb-16 flex flex-col justify-start items-center px-2 sm:px-4 md:px-8 lg:px-0 w-full">
         <div
@@ -16,73 +17,82 @@
                     </template>
                 </Badge>
 
-                <div
-                    class="w-full max-w-[748.71px] lg:w-[748.71px] text-center flex justify-center flex-col text-website-secondary text-[24px] xs:text-[28px] sm:text-[36px] md:text-[52px] lg:text-[80px] font-normal leading-[1.1] sm:leading-[1.15] md:leading-[1.2] lg:leading-24 font-sans px-2 sm:px-4 md:px-0">
-                    Choose the perfect plan
-                    for your business
-                </div>
-                <div
-                    class="w-full max-w-[506.08px] lg:w-[506.08px] text-center flex justify-center flex-col text-website-secondary/75 sm:text-lg md:text-xl leading-[1.4] sm:leading-[1.45] md:leading-[1.5] lg:leading-7 font-sans px-2 sm:px-4 md:px-0 lg:text-lg font-medium text-sm">
-                    Scale your operations with flexible pricing that grows with your team.
-                    Start free, upgrade when you're ready.
-                </div>
+                <SlideUpAnimation :delay="150">
+                    <div
+                        class="w-full max-w-[748.71px] lg:w-[748.71px] text-center flex justify-center flex-col text-website-secondary text-[24px] xs:text-[28px] sm:text-[36px] md:text-[52px] lg:text-[80px] font-normal leading-[1.1] sm:leading-[1.15] md:leading-[1.2] lg:leading-24 font-sans px-2 sm:px-4 md:px-0">
+                        Choose the perfect plan
+                        for your business
+                    </div>
+                </SlideUpAnimation>
+
+                <SlideUpAnimation :delay="250">
+                    <div
+                        class="w-full max-w-[506.08px] lg:w-[506.08px] text-center flex justify-center flex-col text-website-secondary/75 sm:text-lg md:text-xl leading-[1.4] sm:leading-[1.45] md:leading-[1.5] lg:leading-7 font-sans px-2 sm:px-4 md:px-0 lg:text-lg font-medium text-sm">
+                        Scale your operations with flexible pricing that grows with your team.
+                        Start free, upgrade when you're ready.
+                    </div>
+                </SlideUpAnimation>
             </div>
         </div>
 
         <!-- Billing Toggle Section -->
-        <div
-            class="w-full max-w-[960px] lg:w-[960px] px-6 md:px-16 py-9 relative flex justify-center items-center gap-4 mt-8">
-            <!-- Horizontal line -->
+        <SlideUpAnimation :delay="400">
             <div
-                class="w-full max-w-[1060px] h-0 absolute left-1/2 transform -translate-x-1/2 top-[63px] border-t border-website-secondary/12 z-0">
-            </div>
-
-            <!-- Toggle Container -->
-            <div
-                class="p-3 relative bg-website-primary/5 border border-website-primary/5 backdrop-blur-[44px] backdrop-saturate-150 backdrop-brightness-110 flex justify-center items-center rounded-lg z-20 before:absolute before:inset-0 before:bg-white before:opacity-60 before:rounded-lg before:-z-10">
+                class="w-full max-w-[960px] lg:w-[960px] px-6 md:px-16 py-9 relative flex justify-center items-center gap-4 mt-8">
+                <!-- Horizontal line -->
                 <div
-                    class="p-[2px] bg-website-primary/10 shadow-[0px_1px_0px_white] rounded-[99px] border-[0.5px] border-website-primary/10 flex justify-center items-center gap-[2px] relative">
+                    class="w-full max-w-[1060px] h-0 absolute left-1/2 transform -translate-x-1/2 top-[63px] border-t border-website-secondary/12 z-0">
+                </div>
+
+                <!-- Toggle Container -->
+                <div
+                    class="p-3 relative bg-website-primary/5 border border-website-primary/5 backdrop-blur-[44px] backdrop-saturate-150 backdrop-brightness-110 flex justify-center items-center rounded-lg z-20 before:absolute before:inset-0 before:bg-white before:opacity-60 before:rounded-lg before:-z-10">
                     <div
-                        :class="['absolute top-[2px] w-[calc(50%-1px)] h-[calc(100%-4px)] bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.08)] rounded-[99px] transition-all duration-300 ease-in-out', billingPeriod === 'annually' ? 'left-[2px]' : 'right-[2px]']" />
-
-                    <button @click="setBillingPeriod('annually')"
-                        class="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1">
+                        class="p-[2px] bg-website-primary/10 shadow-[0px_1px_0px_white] rounded-[99px] border-[0.5px] border-website-primary/10 flex justify-center items-center gap-[2px] relative">
                         <div
-                            :class="['text-[13px] font-medium leading-5 font-sans transition-colors duration-300', billingPeriod === 'annually' ? ' text-website-primary' : 'text-website-secondary/30']">
-                            Annually
-                        </div>
-                    </button>
+                            :class="['absolute top-[2px] w-[calc(50%-1px)] h-[calc(100%-4px)] bg-white shadow-[0px_2px_4px_rgba(0,0,0,0.08)] rounded-[99px] transition-all duration-300 ease-in-out', billingPeriod === 'annually' ? 'left-[2px]' : 'right-[2px]']" />
 
-                    <button @click="setBillingPeriod('monthly')"
-                        class="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1">
-                        <div
-                            :class="['text-[13px] font-medium leading-5 font-sans transition-colors duration-300', billingPeriod === 'monthly' ? ' text-website-primary' : 'text-website-secondary/30']">
-                            Monthly
-                        </div>
-                    </button>
-                </div>
+                        <button @click="setBillingPeriod('annually')"
+                            class="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1">
+                            <div
+                                :class="['text-[13px] font-medium leading-5 font-sans transition-colors duration-300', billingPeriod === 'annually' ? ' text-website-primary' : 'text-website-secondary/30']">
+                                Annually
+                            </div>
+                        </button>
 
-                <!-- Decorative dots -->
-                <div
-                    class="w-[3px] h-[3px] absolute left-[5px] top-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-ful">
-                </div>
-                <div
-                    class="w-[3px] h-[3px] absolute right-[5px] top-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
-                </div>
-                <div
-                    class="w-[3px] h-[3px] absolute left-[5px] bottom-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
-                </div>
-                <div
-                    class="w-[3px] h-[3px] absolute right-[5px] bottom-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
+                        <button @click="setBillingPeriod('monthly')"
+                            class="px-4 py-1 rounded-[99px] flex justify-center items-center gap-2 transition-colors duration-300 relative z-10 flex-1">
+                            <div
+                                :class="['text-[13px] font-medium leading-5 font-sans transition-colors duration-300', billingPeriod === 'monthly' ? ' text-website-primary' : 'text-website-secondary/30']">
+                                Monthly
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Decorative dots -->
+                    <div
+                        class="w-[3px] h-[3px] absolute left-[5px] top-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-ful">
+                    </div>
+                    <div
+                        class="w-[3px] h-[3px] absolute right-[5px] top-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
+                    </div>
+                    <div
+                        class="w-[3px] h-[3px] absolute left-[5px] bottom-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
+                    </div>
+                    <div
+                        class="w-[3px] h-[3px] absolute right-[5px] bottom-[5.25px] bg-website-primary/10 shadow-[0px_0px_0.5px_rgba(0,0,0,0.12)] rounded-full">
+                    </div>
                 </div>
             </div>
-        </div>
+        </SlideUpAnimation>
 
         <!-- Table -->
         <ComparisonTable :plans="filteredPlans" :period="billingPeriod"
             :features-and-categories="featuresAndCategories" />
 
     </div>
+
+
 </template>
 
 <script setup lang="ts">
@@ -91,8 +101,7 @@ import { ref, defineComponent, h, watch, computed } from 'vue'
 import WebsiteLayout from './WebsiteLayout.vue'
 import ComparisonTable from '@/components/Website/Pricing/ComparisonTable.vue'
 import Badge from '@/components/ui/badge/Badge.vue'
-import { DollarSign } from 'lucide-vue-next';
-import CustomBadge from '@/components/Website/CustomBadge.vue'
+import SlideUpAnimation from '@/components/Website/SlideUpAnimation.vue'
 
 const propsData = defineProps({
     plans: Array,

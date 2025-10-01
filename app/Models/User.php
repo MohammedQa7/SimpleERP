@@ -71,10 +71,16 @@ class User extends Authenticatable
         return $this->morphToMany(PaymentTransaction::class, 'model');
     }
 
+    public function attendances()
+    {
+        return $this->hasMany(Attendances::class, 'employee_id');
+    }
+    
     public function attendanceLogs()
     {
         return $this->hasMany(AttendanceLog::class, 'employee_id');
     }
+
     // SCOPES
     function scopeEmployeesOnly($query)
     {

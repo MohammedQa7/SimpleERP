@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AnnouncementsDialog from '@/components/AnnouncementsDialog.vue';
 import Toaster from '@/components/ui/toast/Toaster.vue';
+import WorkSessionV2 from '@/components/WorkSessionV2.vue';
 import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
 import type { BreadcrumbItemType } from '@/types';
 import { usePage } from '@inertiajs/vue3';
@@ -26,10 +27,11 @@ onMounted(() => {
 
 <template>
     <Toaster />
-
     <!-- Announcments Section -->
     <AnnouncementsDialog v-if="page.props.lastAnnouncement" :is-open="isAnnouncementDialogOpened"
         @update:open="isAnnouncementDialogOpened = $event" />
+
+    <WorkSessionV2 />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <slot />

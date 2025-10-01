@@ -2,8 +2,6 @@
 
 namespace App\Reports\Services;
 
-use App\Classes\PdfExporter;
-use App\Classes\PdfGenerator;
 use App\Reports\Contracts\ReportGenerator;
 
 

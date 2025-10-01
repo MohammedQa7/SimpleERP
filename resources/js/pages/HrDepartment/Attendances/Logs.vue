@@ -25,7 +25,7 @@
                                     @bindDate="bindCalendarDate" />
 
                                 <!-- Export Selection options -->
-                                <ExportOptions :is-disabled="attendanceLogs.data.length > 0" />
+                                <ExportOptions :is-disabled="attendanceLogs.data.length <= 0" />
                             </div>
                         </div>
                     </div>

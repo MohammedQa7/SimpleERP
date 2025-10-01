@@ -30,7 +30,6 @@ class SalesSummary
     {
         $total_revenue = $this->orders->sum('total_price');
 
-
         $total_revenue_current_month = $this->orders->where(function ($query) {
             if ($query->invoice->status->value == InvoiceStatus::PAID->value) {
                 return $query->invoice->updated_at->isSameMonth(now());

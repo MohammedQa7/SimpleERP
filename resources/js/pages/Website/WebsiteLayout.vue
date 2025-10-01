@@ -1,10 +1,9 @@
 <template>
-    <div
-        class="w-full min-h-screen relative bg-website-background overflow-x-hidden flex flex-col justify-start items-center">
-        <div class="relative flex flex-col justify-start items-center w-full">
+    <div class="w-full min-h-screen relative bg-website-background  flex flex-col justify-start items-center">
+        <div class="relative flex flex-col justify-start items-center w-full font-sans">
             <!-- Main container with proper margins -->
             <div
-                class="w-full sm:pt-20 md:pt-24 pt-16 max-w-none px-4 sm:px-6  lg:px-0 lg:max-w-[1060px] lg:w-[1060px] relative flex flex-col justify-start items-start min-h-screen">
+                class="w-full sm:pt-20 md:pt-24 pt-16 max-w-none px-4 sm:px-6  lg:px-0 lg:max-w-[1200px] lg:w-[1200px] relative flex flex-col justify-start items-start min-h-screen">
                 <!-- Left vertical line -->
                 <div
                     class="w-[1px] h-full absolute left-4 sm:left-6 md:left-8 lg:left-0 top-0 bg-website-secondary/10 shadow-[1px_0px_0px_white] z-0">
@@ -20,20 +19,27 @@
 
                 <!-- All Sections -->
                 <slot />
+                <FooterSection />
             </div>
         </div>
+
     </div>
+
+
 </template>
 
 <script setup lang="ts">
-import BentoGridSection from '@/components/Website/BentoGridSection.vue'
-import BusinessHero from '@/components/Website/BusinessHero.vue'
-import DashboardAndFeatureSection from '@/components/Website/DashboardAndFeatureSection.vue'
-import FooterSection from '@/components/Website/FooterSection.vue'
-import HeadingSection from '@/components/Website/HeadingSection.vue'
-import Navbar from '@/components/Website/Navbar.vue'
-import PricingSection from '@/components/Website/PricingSection.vue'
-import SocialProofSection from '@/components/Website/SocialProofSection.vue'
-import Pricing from './Pricing.vue'
 
+import FooterSection from '@/components/Website/FooterSection.vue';
+import Navbar from '@/components/Website/Navbar.vue'
+import { useAppearance } from '@/composables/useAppearance';
+import { useForm } from '@inertiajs/vue3';
+import { ImageDownIcon } from 'lucide-vue-next';
+import { computed, onMounted, ref, toRef, watch } from 'vue';
+const appearance = useAppearance();
+
+
+onMounted(() => {
+    appearance.updateAppearance('light')
+})
 </script>

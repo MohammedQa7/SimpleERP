@@ -90,6 +90,7 @@ Route::middleware('auth')->group(function () {
     // Global Access to all permissions;
 
     Route::resource('employee/leave-requests', EmployeeRequestController::class)->except('destroy', 'edit', 'show', 'update')->names('employee.requests');
+    Route::get('test/atten', [AttendanceController::class, 'test']);
 
     // Exporting different type of files for all departments 
     Route::get('export/{module}/{type}', ExportController::class)->name('export');

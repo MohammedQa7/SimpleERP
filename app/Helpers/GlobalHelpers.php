@@ -26,12 +26,23 @@ class GlobalHelpers
         return $string;
     }
 
+
     public static function humanReadableFileSize($bytes, $decimals = 2)
     {
         $size = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
         $factor = floor((strlen($bytes) - 1) / 3);
 
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . ' ' . $size[$factor];
+    }
+
+    public static function calculateTotalHours($check_in, $check_out)
+    {
+        if (!is_null($check_out)) {
+            $total_hours = $check_in->diffAsCarbonInterval($check_out);
+            return $total_hours->format('%hh %im');
+        }
+        return '0h 00m';
+        
     }
 
 }

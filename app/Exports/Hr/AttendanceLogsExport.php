@@ -19,8 +19,7 @@ class AttendanceLogsExport implements FromCollection, WithHeadings
      */
     public function collection()
     {
-        $attendance_logs = AttendanceLog::
-            Filter([...request()->query])
+        $attendance_logs = AttendanceLog::Filter([...request()->query])
             ->select(['id', 'employee_id', 'action', 'device', 'created_at'])
             ->with([
                 'employee' => function ($query) {

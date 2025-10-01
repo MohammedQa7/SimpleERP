@@ -6,6 +6,7 @@ import QuickAccessCommand from './QuickAccessCommand.vue';
 import { ChevronRight, Sparkles } from 'lucide-vue-next';
 import { ref } from 'vue';
 import WorkSession from './WorkSession.vue';
+import WorkSessionV2 from './WorkSessionV2.vue';
 const isOpen = ref(false);
 defineProps<{
     breadcrumbs?: BreadcrumbItemType[];
@@ -26,7 +27,7 @@ defineProps<{
             <QuickAccessCommand />
 
             <!-- Checking in and out for employees -->
-            <WorkSession />
+            <!-- <WorkSession /> -->
         </div>
 
     </header>

@@ -21,10 +21,8 @@ class EmployeeRequestController extends Controller
         // whereEmployeeId It’s generated automatically by Laravel based on your model’s table column employee_id.
         $current_employee_requests = DepartmentRequest::whereEmployeeId(auth()->user()->id)
             ->with('employeeRequest')
-            ->whereHas('employeeRequest', function ($query) {
-                return $query->GetRequestsFromToday();
-            })
             ->get();
+
         return Inertia::render('Employee/LeaveRequests', [
             'employeeRequests' => DepartmentRequestResource::collection($current_employee_requests),
             'requestTypes' => LeaveTypes::toArray(),

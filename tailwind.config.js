@@ -16,8 +16,7 @@ export default {
         'bg-emerald-900/30',
         'bg-amber-900/30',
         'bg-rose-900/30',
-
-        // Add other colors or classes you expect to use dynamically
+        { pattern: /grid-cols-(1|2|3|4|5|6|7|8|9|10)/ }// Matches grid-cols-1 to grid-cols-12
     ],
     theme: {
         extend: {
@@ -38,6 +37,7 @@ export default {
                 'website-primary': 'hsl(var(--website-primary) / <alpha-value>)',
                 'website-secondary': 'hsl(var(--website-secondary) / <alpha-value>)',
                 'website-secondary-foreground': 'hsl(var(--website-secondary-foreground) / <alpha-value>)',
+                'website-secondary-foreground-light': 'hsl(var(--website-secondary-foreground-light) / <alpha-value>)',
                 'website-background': 'hsl(var(--website-background) / <alpha-value>)',
 
 
