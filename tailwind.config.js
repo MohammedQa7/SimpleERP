@@ -20,7 +20,6 @@ export default {
     ],
     theme: {
         extend: {
-
             fontFamily: {
                 sans: ['Instrument Sans', ...defaultTheme.fontFamily.sans],
                 NeueReg: "NeueReg",
@@ -110,6 +109,8 @@ export default {
             },
         },
     },
+
+
 
     plugins: [
         require('tailwindcss-animate'),

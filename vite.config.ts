@@ -6,7 +6,11 @@ import tailwindcss from 'tailwindcss';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+
+    // define: {
+    //     __VUE_PROD_DEVTOOLS__: mode == 'production',
+    // },
     plugins: [
         laravel({
             input: ['resources/js/app.ts'],
@@ -33,4 +37,5 @@ export default defineConfig({
             plugins: [tailwindcss, autoprefixer],
         },
     },
-});
+
+}));

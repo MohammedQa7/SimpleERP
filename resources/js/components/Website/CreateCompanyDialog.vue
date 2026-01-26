@@ -1,5 +1,5 @@
 <template>
-    <Dialog :open="isOpen" @update:open="isOpen = $event; resetFileUpload();">
+    <Dialog :open="isDialogOpened" @update:open="isDialogOpened = $event; resetFileUpload()">
         <DialogContent class="max-w-[600px] bg-gray-100/90 p-1">
             <div class="bg-white shadow-2xl py-8  px-10 sm:px-16 rounded">
                 <div class="dialog-custom-header ">
@@ -40,19 +40,26 @@
                         <DialogClose>
                             <Button variant="outline" class="hover:bg-gray-200">Close</Button>
                         </DialogClose>
-                        <Button class=" bg-website-primary hover:bg-website-primary/80  w-40">New
+
+                        <Button @click.prevent="toggleTenantLoading"
+                            class=" bg-website-primary hover:bg-website-primary/80  w-40">New
                             project</Button>
+
                     </div>
                 </div>
             </div>
         </DialogContent>
+
+
+        <!-- Loader for create a new company tenant -->
+        <SetupTenantLoader v-if="isLoading" :steps="loaderSteps" :is-loading="isLoading" />
     </Dialog>
 
-    <SetupCompanyTenantLoader />
+
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import Button from '../ui/button/Button.vue';
 import Dialog from '../ui/dialog/Dialog.vue';
 import DialogClose from '../ui/dialog/DialogClose.vue';
@@ -60,15 +67,23 @@ import DialogContent from '../ui/dialog/DialogContent.vue';
 import Input from '../ui/input/Input.vue';
 import Label from '../ui/label/Label.vue';
 import { useForm } from '@inertiajs/vue3';
-import SetupCompanyTenantLoader from './SetupCompanyTenantLoader.vue';
-const propsData = defineProps({
-    isOpen: Boolean
-});
+import SetupTenantLoader from './SetupTenantLoader.vue';
+import { useEchoPublic } from '@laravel/echo-vue';
+import { router } from '@inertiajs/vue3';
 const imagePreview = ref(null);
+const loaderSteps = ref([]);
+const isLoading = ref(false);
 const form = useForm({
     companyName: 'test',
     companyLogo: null,
 });
+const propsData = defineProps({
+    isOpen: Boolean,
+});
+
+const isDialogOpened = computed(() => {
+    return propsData.isOpen;
+})
 
 const siteUrl = computed(() => {
     return 'www.' + form.companyName + '.lomen.com'
@@ -82,8 +97,22 @@ const handleFileUpload = (event) => {
     }
 }
 
+const toggleTenantLoading = () => {
+    isLoading.value = true;
+    router.post(route('tenant.store'), {}, {
+        preserveScroll: true,
+        preserveState: true,
+    })
+}
+
 const resetFileUpload = () => {
     form.companyLogo = null;
     imagePreview.value = null;
 }
+
+useEchoPublic('tenant-setup', 'TenantSetupSteps', (data) => {
+    loaderSteps.value = data;
+    console.log('setupSetups');
+})
+
 </script>

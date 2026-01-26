@@ -82,6 +82,8 @@
 </template>
 
 <script setup lang="ts">
+import { useEchoPublic } from "@laravel/echo-vue";
+import Echo from "laravel-echo";
 import { ref, watch, onUnmounted } from "vue";
 
 interface Step {
@@ -130,20 +132,25 @@ async function proceedToNextStep() {
   await executeStepAction(currentStep);
 
   if (currentState.value < props.steps.length - 1) {
-    
+
     currentState.value++;
     stepStartTime.value = Date.now();
     emit("state-change", currentState.value);
+
     processCurrentStep();
   } else {
     isLastStepComplete.value = true;
     emit("complete");
-    
+
   }
 }
 
-async function processCurrentStep() {
-  
+// MOVING TO THE NEXT STEP WHEN I RECIEVE AN EVENT.
+useEchoPublic('tenant-setup', ['TenantDomainSetup', 'TenantDatabaseSetup', 'TenantEssentialDataCreation', 'TenantFinalizingProcess'],
+  () => {
+    proceedToNextStep();
+  })
+function processCurrentStep() {
   // if (currentTimer) {
   //   clearTimeout(currentTimer);
   // }

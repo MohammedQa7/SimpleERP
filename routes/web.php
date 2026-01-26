@@ -1,6 +1,5 @@
 <?php
 
-use App\Actions\AttachMediaToAnyModel;
 use App\Enums\UserRoles;
 use App\Http\Controllers\AdjustProductStockController;
 use App\Http\Controllers\ApproveStockRequestController;
@@ -28,9 +27,11 @@ use App\Http\Controllers\WarehouseRequestController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+
 Route::get('/', function () {
     return Inertia::render('Welcome');
 })->name('home');
+
 
 Route::middleware('auth')->group(function () {
 
@@ -88,7 +89,6 @@ Route::middleware('auth')->group(function () {
     });
 
     // Global Access to all permissions;
-
     Route::resource('employee/leave-requests', EmployeeRequestController::class)->except('destroy', 'edit', 'show', 'update')->names('employee.requests');
     Route::get('test/atten', [AttendanceController::class, 'test']);
 
@@ -107,18 +107,13 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-Route::get('test', function () {
-    return Inertia::render('test');
-});
-
 Route::get('test2', function () {
     return Inertia::render('calendar');
 });
-
-
-
-
+Route::get('error', function () {
+    abort(404);
+    // return Inertia::render('Errors/404');
+});
 
 
 Route::get('dashboard', function () {

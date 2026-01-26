@@ -12,9 +12,22 @@ import axios from 'axios';
 import * as FilePond from 'filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import { configureEcho } from '@laravel/echo-vue';
+
+configureEcho({
+    broadcaster: "reverb",
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST,
+    wsPort: import.meta.env.VITE_REVERB_PORT,
+    wssPort: import.meta.env.VITE_REVERB_PORT,
+    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+    enabledTransports: ['ws', 'wss'],
+});
+
 
 // Emoji
 import 'vue3-emoji-picker/css'
+import { initializeCustomTheme } from './composables/useCustomTheme';
 
 // Axios
 window.axios = axios
@@ -55,3 +68,6 @@ createInertiaApp({
 
 // This will set light / dark mode on page load...
 initializeTheme();
+
+// This will set the theme.css file and load it up on page load...
+initializeCustomTheme();

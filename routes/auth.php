@@ -8,7 +8,9 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\RememberedAccountController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -53,4 +55,17 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+});
+
+
+// Connecting another account "ability to swtich accounts without the need to re-enter the users Creds."
+Route::middleware('auth')->group(function () {
+    Route::get('/accounts/switch/login', function () {
+        return Inertia::render('auth/AdditionalAccountLogin');
+    })->name('accounts.switch.login');
+
+    Route::post('/accounts/switch/login', [RememberedAccountController::class, 'store'])
+        ->name('accounts.switch.authenticate');
+    Route::post('/u/{account}', [RememberedAccountController::class, 'switch'])
+        ->name('accounts.switch');
 });
